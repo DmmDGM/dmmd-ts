@@ -58,3 +58,12 @@ export function parsePrototypeChain(value: null | unknown): Set<object | never> 
 	// Returns chain
 	return chain;
 }
+
+/** Checks and returns whether a non-undefined value is an instance of parent */
+export function testParentPrototype(value: unknown, parent: object): boolean {
+	// Parses chain
+	const chain = parsePrototypeChain(value);
+	
+	// Returns result
+	return chain.has(parent);
+}

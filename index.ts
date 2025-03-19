@@ -1,4 +1,4 @@
-import { findCommonPrototype, numberPrototype, objectPrototype, parsePrototypeChain } from "./utils/prototype-inspect";
+import { findCommonPrototype, numberPrototype, objectPrototype, parsePrototypeChain } from "./vanilla/prototype";
 
 class A {}
 class B extends A {}
