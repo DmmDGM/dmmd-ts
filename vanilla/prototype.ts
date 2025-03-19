@@ -1,18 +1,21 @@
+// Imports
+import * as primitive from "./primitive";
+
 // Defines constants
 /** Bigint prototype */
-export const bigintPrototype = Object.getPrototypeOf(0n);
+export const bigintPrototype = Object.getPrototypeOf(primitive.bigintPrimitive);
 /** Boolean prototype */
-export const booleanPrototype = Object.getPrototypeOf(false);
+export const booleanPrototype = Object.getPrototypeOf(primitive.booleanPrimitive);
 /** Function prototype */
-export const functionPrototype = Object.getPrototypeOf(() => { });
+export const functionPrototype = Object.getPrototypeOf(primitive.functionPrimitive);
 /** Number prototype */
-export const numberPrototype = Object.getPrototypeOf(0);
+export const numberPrototype = Object.getPrototypeOf(primitive.numberPrimitive);
 /** Object prototype */
-export const objectPrototype = Object.getPrototypeOf({});
+export const objectPrototype = Object.getPrototypeOf(primitive.objectPrimitive);
 /** String prototype */
-export const stringPrototype = Object.getPrototypeOf("");
+export const stringPrototype = Object.getPrototypeOf(primitive.stringPrimitive);
 /** Symbol prototype */
-export const symbolPrototype = Object.getPrototypeOf(Symbol.for(""));
+export const symbolPrototype = Object.getPrototypeOf(primitive.symbolPrimitive);
 
 // Defines functions
 /** Finds and returns the closest common prototype of two non-undefined values or null if either is null */
