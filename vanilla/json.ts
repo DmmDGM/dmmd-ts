@@ -1,6 +1,7 @@
 // Defines types
 /** Json literal type */
-export type JsonType = string | number | boolean | null | JsonType[] | { [ key: string ]: JsonType };
+export type JsonType = string | number | boolean | null | JsonType[] |
+	{ [ key: string ]: JsonType };
 
 /** Checks and returns whether a string or buffer contains valid json */
 export function testText(text: Buffer | string): boolean {
