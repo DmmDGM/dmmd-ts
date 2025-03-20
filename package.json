@@ -9,5 +9,8 @@
 	"peerDependencies": {
 		"typescript": "^5.0.0"
 	},
+	"scripts": {
+		"build": "bun build . --outdir ./ --minify"
+	},
 	"type": "module"
 }
