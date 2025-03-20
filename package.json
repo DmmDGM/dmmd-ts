@@ -1,14 +1,13 @@
 {
+	"dependencies": {
+		"chalk": "^5.4.1"
+	},
 	"devDependencies": {
 		"@types/bun": "latest"
 	},
-	"module": "index.ts",
 	"name": "dmmd-ts",
 	"peerDependencies": {
 		"typescript": "^5.0.0"
 	},
-	"type": "module",
-	"dependencies": {
-		"chalk": "^5.4.1"
-	}
+	"type": "module"
 }

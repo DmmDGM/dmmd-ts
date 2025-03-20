@@ -1,6 +1,5 @@
 // Defines functions
-/** Finds and returns the closest common prototype of two non-undefined values or null if either
- *  is null. */
+/** Finds and returns the closest common prototype of two non-undefined values or null if either is null. */
 export function findCommonPrototype(left: unknown, right: unknown): object | null {
 	// Parses prototype chain
 	const leftChain = parsePrototypeChain(left);
@@ -21,8 +20,7 @@ export function findCommonPrototype(left: unknown, right: unknown): object | nul
 /** Parses and returns a set containing the entire prototype chain of a non-undefined value. */
 export function parsePrototypeChain(value: unknown): Set<object> {
 	// Handles undefined value
-	if (typeof value === "undefined")
-		throw new Error("Prototype chain does not exists on undefined");
+	if (typeof value === "undefined") throw new Error("Prototype chain does not exists on undefined");
 
 	// Handles null value
 	const chain: Set<object> = new Set();
