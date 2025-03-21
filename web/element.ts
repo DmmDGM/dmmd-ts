@@ -123,17 +123,12 @@ export function createFull<
     options: Partial<ElementFullOptions<TagName>> = {}
 ): HTMLElementTagNameMap[TagName] {
     // Creates and initializes element
-    const element = create(tagname);
+    const element = document.createElement(tagname);
 
-    // Overwrites element
-    const overwrite = Object.assign({}, options);
-    const optionNames: (keyof ElementSimplifiedOptions<TagName>)[] = [
-        "attributes", "classes", "events", "href",
-        "html", "id", "parent", "src", "style", "text"
-    ];
-    for(let i = 0; optionNames.length; i++) delete overwrite[optionNames[i]];
-    Object.assign(element, overwrite);
-
+    // Initializes element
+    Object.assign(element, options);
+    modify(tagname, options);
+    
     // Returns element
     return element;
 }
