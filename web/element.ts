@@ -68,6 +68,42 @@ export function create<
                 }
                 break;
             }
+            case "href": {
+                const href = options[optionName] ?? "";
+                element.setAttribute("href", href);
+                break;
+            }
+            case "html": {
+                const html = options[optionName] ?? "";
+                element.innerHTML = html;
+                break;
+            }
+            case "id": {
+                const id = options[optionName] ?? "";
+                element.id = id;
+                break;
+            }
+            case "parent": {
+                const parent = options[optionName] ?? null;
+                if(parent === null) continue;
+                parent.appendChild(element);
+                break;
+            }
+            case "src": {
+                const src = options[optionName] ?? "";
+                element.setAttribute("src", src);
+                break;
+            }
+            case "style": {
+                const style = options[optionName] ?? {};
+                Object.assign(element.style, style);
+                break;
+            }
+            case "text": {
+                const text = options[optionName] ?? "";
+                element.innerText = text;
+                break;
+            }
         }
     }
 
@@ -86,6 +122,18 @@ export function createFull<
     tagname: TagName,
     options: Partial<ElementFullOptions<TagName>> = {}
 ): HTMLElementTagNameMap[TagName] {
+    // Creates and initializes element
     const element = create(tagname);
+
+    // Overwrites element
+    const overwrite = Object.assign({}, options);
+    const optionNames: (keyof ElementSimplifiedOptions<TagName>)[] = [
+        "attributes", "classes", "events", "href",
+        "html", "id", "parent", "src", "style", "text"
+    ];
+    for(let i = 0; optionNames.length; i++) delete overwrite[optionNames[i]];
+    Object.assign(element, overwrite);
+
+    // Returns element
     return element;
 }
