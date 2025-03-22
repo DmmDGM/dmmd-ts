@@ -9,7 +9,7 @@ export type ElementSimplifiedOptions<Element extends HTMLElement> = {
     classes: string[];
     events: Partial<{ [ Event in keyof HTMLElementEventMap ]: (
         this: Element,
-        event: HTMLElementEventMap[Event]
+        event: HTMLElementEventMap[Event][] | HTMLElementEventMap[Event]
     ) => any }>;
     href: string;
     html: string;
@@ -136,8 +136,8 @@ export function modifyEvents<Element extends HTMLElement>(
     const eventNames = Object.getOwnPropertyNames(events);
     for(let i = 0; i < eventNames.length; i++) {
         const eventName = eventNames[i] as keyof typeof events & string;
-        const event = events[eventName] as EventListenerOrEventListenerObject;
-        element.addEventListener(eventName, event);
+        const event = Array.isArray(events[eventName]) ? events[eventName] : [ events[eventName] ];
+        for(let j = 0; j < event.length; j++) element.addEventListener(eventName, event[j]);
     }
 }
 
