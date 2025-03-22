@@ -1,15 +1,12 @@
 // Defines types
-/** Full options for element creation with custom shortcuts. */
-type ElementFullOptions<
-    Element extends HTMLElement = HTMLElement
-> = ElementSimplifiedOptions<Element> & { [ Key in keyof Element ]: Element[Key] };
-/** Simplified options for element creation with custom shortcuts. */
-type ElementSimplifiedOptions<
-    Element extends HTMLElement = HTMLElement
-> = {
-    attributes: Record<string, string>;
+/** Collection of custom options for element modification.
+ * 
+ *  Please prefer `ElementOption<Element>` unless you know what you are doing.
+*/
+export type ElementSimplifiedOptions<Element extends HTMLElement> = {
+    attributes: { [ attribute: string ]: string };
     classes: string[];
-    events: Partial<{ [Event in keyof HTMLElementEventMap]: (
+    events: Partial<{ [ Event in keyof HTMLElementEventMap ]: (
         this: Element,
         event: HTMLElementEventMap[Event]
     ) => any }>;
@@ -21,23 +18,19 @@ type ElementSimplifiedOptions<
     style: Partial<CSSStyleDeclaration>;
     text: string;
 };
+/** Collection of native options for element modification.
+ * 
+ *  Please prefer `ElementOption<Element>` unless you know what you are doing.
+*/
+export type ElementNativeOptions<Element extends HTMLElement> = { [ Key in keyof Element ]: Element[Key] };
+/** Collection of options with custom shortcuts for element modification. */
+export type ElementOptions<Element extends HTMLElement> =
+    ElementSimplifiedOptions<Element> &
+    Omit<ElementNativeOptions<Element>, keyof ElementSimplifiedOptions<Element>>;
 
 // Defines constants
-/** Default element creation options. */
-export const elementDefaultOptions: ElementSimplifiedOptions = {
-    attributes: {},
-    classes: [],
-    events: {},
-    href: "",
-    html: "",
-    id: "",
-    parent: document.body,
-    src: "",
-    style: {},
-    text: ""
-};
-/** Collection of element modifiers. */
-export const modifiers = {
+/** Default collection of modifiers. */
+export const elementDefaultModifiers = {
     attributes: modifyAttributes,
     classes: modifyClasses,
     events: modifyEvents,
@@ -48,45 +41,71 @@ export const modifiers = {
     src: modifySrc,
     style: modifyStyle,
     text: modifyText
-};
+}
 
-/** Modifies an element with a simplied set of options. */
-export function modify<
-    Element extends HTMLElement = HTMLElement
->(
+/** Creates, initializes, and returns an element with a set of options. */
+export function create<TagName extends keyof HTMLElementTagNameMap>(
+    tagName: TagName,
+    options: Partial<ElementOptions<HTMLElementTagNameMap[TagName]>> = {},
+    modifiers: Partial<{ [ Key in keyof ElementOptions<HTMLElementTagNameMap[TagName]> ]: (
+        element: HTMLElementTagNameMap[TagName],
+        option: ElementOptions<HTMLElementTagNameMap[TagName]>[Key]
+    ) => void }> = elementDefaultModifiers as typeof modifiers
+): HTMLElementTagNameMap[TagName] {
+    // Creates element
+    const element = document.createElement(tagName);
+
+    // Initializes element
+    modify(element, options, modifiers);
+
+    // Returns element
+    return element;
+}
+
+/** Modifies an element with a set of options. */
+export function modify<Element extends HTMLElement>(
     element: Element,
-    options: Partial<ElementSimplifiedOptions<Element>>
+    options: Partial<ElementOptions<Element>>,
+    modifiers: Partial<{ [ Key in keyof ElementOptions<Element> ]: (
+        element: Element,
+        option: ElementOptions<Element>[Key]
+    ) => void }> = elementDefaultModifiers as typeof modifiers
 ): void {
     // Modifies element
-    const optionNames = Object.getOwnPropertyNames(options);
-    for(let i = 0; i < optionNames.length; i++) {
-        const optionName = optionNames[i] as keyof typeof options;
-        if(optionName in modifiers) modifiers[optionName](element, )
+    const overwrites = Object.assign({}, options);
+    const overwriteNames = Object.getOwnPropertyNames(options);
+    for(let i = 0; i < overwriteNames.length; i++) {
+        const overwriteName = overwriteNames[i] as keyof typeof overwrites;
+        const overwrite = overwrites[overwriteName];
+        if(typeof overwrite === "undefined") continue;
+        if(overwriteName in modifiers) {
+            delete overwrites[overwriteName];
+            const modifier = modifiers[overwriteName];
+            if(typeof modifier === "undefined") continue;
+            modifier(element, overwrite as any);
+        }
     }
+    Object.assign(element, overwrites);
 }
 
 /** Modifies an element's attributes */
-export function modifyAttributes<
-    Element extends HTMLElement = HTMLElement
->(
+export function modifyAttributes<Element extends HTMLElement>(
     element: Element,
-    attributes: ElementSimplifiedOptions["attributes"]
+    attributes: ElementOptions<Element>["attributes"]
 ): void {
     // Modifies attributes
     const attributeNames = Object.getOwnPropertyNames(attributes);
-    for(let j = 0; j < attributeNames.length; j++) {
-        const attributeName = attributeNames[j] as keyof typeof attributes;
+    for(let i = 0; i < attributeNames.length; i++) {
+        const attributeName = attributeNames[i] as keyof typeof attributes & string;
         const attribute = attributes[attributeName];
         element.setAttribute(attributeName, attribute);
     }
 }
 
 /** Modifies an element's class list. */
-export function modifyClasses<
-    Element extends HTMLElement = HTMLElement
->(
+export function modifyClasses<Element extends HTMLElement>(
     element: Element,
-    classes: ElementSimplifiedOptions["classes"]
+    classes: ElementOptions<Element>["classes"]
 ): void {
     // Modifies classes
     for(let i = 0; i < classes.length; i++) {
@@ -96,136 +115,78 @@ export function modifyClasses<
 }
 
 /** Modifies an element's events. */
-export function modifyEvents<
-    Element extends HTMLElement = HTMLElement
->(
+export function modifyEvents<Element extends HTMLElement>(
     element: Element,
-    events: ElementSimplifiedOptions["events"]
+    events: ElementOptions<Element>["events"]
 ): void {
     // Modifies events
     const eventNames = Object.getOwnPropertyNames(events);
-    for(let j = 0; j < eventNames.length; j++) {
-        const eventName = eventNames[j] as keyof typeof events;
+    for(let i = 0; i < eventNames.length; i++) {
+        const eventName = eventNames[i] as keyof typeof events & string;
         const event = events[eventName] as EventListenerOrEventListenerObject;
         element.addEventListener(eventName, event);
     }
 }
 
 /** Modifies an element's href. */
-export function modifyHref<
-    Element extends HTMLElement = HTMLElement
->(
+export function modifyHref<Element extends HTMLElement>(
     element: Element,
-    href: ElementSimplifiedOptions["href"]
+    href: ElementOptions<Element>["href"]
 ): void {
     // Modifies events
     element.setAttribute("href", href);
 }
 
 /** Modifies an element's inner html. */
-export function modifyHtml<
-    Element extends HTMLElement = HTMLElement
->(
+export function modifyHtml<Element extends HTMLElement>(
     element: Element,
-    html: ElementSimplifiedOptions["html"]
+    html: ElementOptions<Element>["html"]
 ): void {
     // Modifies events
     element.innerHTML = html;
 }
 
 /** Modifies an element's id. */
-export function modifyId<
-    Element extends HTMLElement = HTMLElement
->(
+export function modifyId<Element extends HTMLElement>(
     element: Element,
-    id: ElementSimplifiedOptions["id"]
+    id: ElementOptions<Element>["id"]
 ): void {
     // Modifies events
     element.id = id;
 }
 
 /** Modifies an element's parent. */
-export function modifyParent<
-    Element extends HTMLElement = HTMLElement
->(
+export function modifyParent<Element extends HTMLElement>(
     element: Element,
-    parent: ElementSimplifiedOptions["parent"]
+    parent: ElementOptions<Element>["parent"]
 ): void {
     // Modifies events
     parent.appendChild(element);
 }
 
 /** Modifies an element's src. */
-export function modifySrc<
-    Element extends HTMLElement = HTMLElement
->(
+export function modifySrc<Element extends HTMLElement>(
     element: Element,
-    src: ElementSimplifiedOptions["src"]
+    src: ElementOptions<Element>["src"]
 ): void {
     // Modifies events
     element.setAttribute("src", src);
 }
 
 /** Modifies an element's style. */
-export function modifyStyle<
-    Element extends HTMLElement = HTMLElement
->(
+export function modifyStyle<Element extends HTMLElement>(
     element: Element,
-    style: ElementSimplifiedOptions["style"]
+    style: ElementOptions<Element>["style"]
 ): void {
     // Modifies events
     Object.assign(element.style, style);
 }
 
 /** Modifies an element's inner text. */
-export function modifyText<
-    Element extends HTMLElement = HTMLElement
->(
+export function modifyText<Element extends HTMLElement>(
     element: Element,
-    text: ElementSimplifiedOptions["text"]
+    text: ElementOptions<Element>["text"]
 ): void {
     // Modifies events
     element.innerText = text;
-}
-
-
-
-/** Creates, initializes, and returns an element with a simplified set of options. */
-export function create<
-    TagName extends keyof HTMLElementTagNameMap,
-    Element extends HTMLElement = HTMLElementTagNameMap[TagName]
->(
-    tagname: TagName,
-    options: Partial<ElementSimplifiedOptions<Element>> = {}
-): HTMLElementTagNameMap[TagName] {
-    // Creates element
-    const element = document.createElement(tagname);
-
-    // Initializes element
-    modify(element, options);
-
-    // Returns element
-    return element;
-}
-
-/** Creates, initializes, and returns an element with a full set of options.
- *  
- *  Please prefer `create(tagname, options)` when total customization is not required.
- *  
- *  Collision in option types may occur. Please use with caution. */
-export function createFull<
-    TagName extends keyof HTMLElementTagNameMap
->(
-    tagname: TagName,
-    options: Partial<ElementFullOptions<TagName>> = {}
-): HTMLElementTagNameMap[TagName] {
-    // Creates and initializes element
-    const element = document.createElement(tagname);
-
-    // Initializes element
-    Object.assign(element, options);
-    modify(tagname, options);
-    
-    // Returns element
-    return element;
 }
