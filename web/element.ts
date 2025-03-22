@@ -1,8 +1,7 @@
 // Defines types
 /** Collection of custom options for element modification.
  * 
- *  Please prefer `ElementOption<Element>` unless you know what you are doing.
-*/
+ *  Please prefer `ElementOption<Element>` unless you know what you are doing. */
 export type ElementSimplifiedOptions<Element extends HTMLElement> = {
     attributes: { [ attribute: string ]: string };
     children: HTMLElement[];
@@ -21,8 +20,7 @@ export type ElementSimplifiedOptions<Element extends HTMLElement> = {
 };
 /** Collection of native options for element modification.
  * 
- *  Please prefer `ElementOption<Element>` unless you know what you are doing.
-*/
+ *  Please prefer `ElementOption<Element>` unless you know what you are doing. */
 export type ElementNativeOptions<Element extends HTMLElement> = { [ Key in keyof Element ]: Element[Key] };
 /** Collection of options with custom shortcuts for element modification. */
 export type ElementOptions<Element extends HTMLElement> =
@@ -45,7 +43,7 @@ export const elementDefaultModifiers: Partial<ElementModifiers<HTMLElement>> = {
     id: modifyId,
     parent: modifyParent,
     src: modifySrc,
-    style: modifyStyle,
+    style: appendStyle,
     text: modifyText
 }
 
@@ -89,7 +87,10 @@ export function modify<Element extends HTMLElement>(
     Object.assign(element, overwrites);
 }
 
-/** Appends attributes to an element's attributes list */
+/** Appends attributes to an element's attributes list.
+ * 
+ *  Alias of `element.setAttribute(attribute, value)`.
+ */
 export function appendAttributes<Element extends HTMLElement>(
     element: Element,
     attributes: ElementOptions<Element>["attributes"]
@@ -114,7 +115,10 @@ export function replaceAttributes<Element extends HTMLElement>(
     appendAttributes(element, attributes);
 }
 
-/** Appends children to an element's children list. */
+/** Appends children to an element's children list.
+ * 
+ *  Alias of `element.appendChild(child)`;
+*/
 export function appendChildren<Element extends HTMLElement>(
     element: Element,
     children: ElementOptions<Element>["children"]
@@ -126,7 +130,9 @@ export function appendChildren<Element extends HTMLElement>(
     }
 }
 
-/** Replaces an element's children list. */
+/** Replaces an element's children list.
+ *  
+ *  Alias of `element.replaceChildren(...children)`. */
 export function replaceChildren<Element extends HTMLElement>(
     element: Element,
     children: ElementOptions<Element>["children"]
@@ -135,7 +141,10 @@ export function replaceChildren<Element extends HTMLElement>(
     element.replaceChildren(...children);
 }
 
-/** Appends classes to an element's class list. */
+/** Appends classes to an element's class list.
+ * 
+ *  Alias of `element.classList.add(class)`.
+*/
 export function appendClasses<Element extends HTMLElement>(
     element: Element,
     classes: ElementOptions<Element>["classes"]
@@ -150,12 +159,14 @@ export function replaceClasses<Element extends HTMLElement>(
     classes: ElementOptions<Element>["classes"]
 ): void {
     // Replaces classes
-    for(let i = element.classList.length - 1; i >= 0; i--)
-        element.classList.remove(element.classList.item(i)!);
+    element.classList = "";
     for(let i = 0; i < classes.length; i++) element.classList.add(classes[i]);
 }
 
-/** Appends events to an element's events. */
+/** Appends events to an element's events.
+ * 
+ *  Alias of `element.addEventListener(event, listener)`.
+*/
 export function appendEvents<Element extends HTMLElement>(
     element: Element,
     events: ElementOptions<Element>["events"]
@@ -181,68 +192,90 @@ export function replaceEvents<Element extends HTMLElement>(
     appendEvents(element, events);
 }
 
-/** Modifies an element's href. */
+/** Modifies an element's href.
+ * 
+ *  Alias of `element.href = href`. */
 export function modifyHref<Element extends HTMLElement>(
     element: Element,
     href: ElementOptions<Element>["href"]
 ): void {
-    // Modifies events
+    // Modifies href
     element.setAttribute("href", href);
 }
 
-/** Modifies an element's inner html. */
+/** Modifies an element's inner html.
+ * 
+ *  Alias of `element.innerHTML = html`. */
 export function modifyHtml<Element extends HTMLElement>(
     element: Element,
     html: ElementOptions<Element>["html"]
 ): void {
-    // Modifies events
+    // Modifies html
     element.innerHTML = html;
 }
 
-/** Modifies an element's id. */
+/** Modifies an element's id.
+ * 
+ *  Alias of `element.id = id`. */
 export function modifyId<Element extends HTMLElement>(
     element: Element,
     id: ElementOptions<Element>["id"]
 ): void {
-    // Modifies events
+    // Modifies id
     element.id = id;
 }
 
-/** Modifies an element's parent. */
+/** Modifies an element's parent.
+ * 
+ *  Alias of `parent.appendChild(element)` or `parent.removeChild(element)` if parent is null. */
 export function modifyParent<Element extends HTMLElement>(
     element: Element,
     parent: ElementOptions<Element>["parent"]
 ): void {
-    // Modifies events
+    // Modifies parent
     if(parent === null) {
         if(element.parentElement !== null) element.parentElement.removeChild(element);
     }
     else parent.appendChild(element);
 }
 
-/** Modifies an element's src. */
+/** Modifies an element's src.
+ * 
+ *  Alias of `parent.src = src;`. */
 export function modifySrc<Element extends HTMLElement>(
     element: Element,
     src: ElementOptions<Element>["src"]
 ): void {
-    // Modifies events
+    // Modifies src
     element.setAttribute("src", src);
 }
 
-/** Modifies an element's style. */
-export function modifyStyle<Element extends HTMLElement>(
+/** Appends stlye to an element's style. */
+export function appendStyle<Element extends HTMLElement>(
     element: Element,
     style: ElementOptions<Element>["style"]
 ): void {
-    // Modifies events
+    // Appensd style
     Object.assign(element.style, style);
 }
 
-/** Modifies an element's inner text. */
+/** Replaces an element's style. */
+export function replaceStyle<Element extends HTMLElement>(
+    element: Element,
+    style: ElementOptions<Element>["style"]
+): void {
+    // Replaces style
+    element.style = "";
+    appendStyle(element, style);
+}
+
+/** Modifies an element's inner text.
+ * 
+ *  Alias of `element.innerText = text`. */
 export function modifyText<Element extends HTMLElement>(
     element: Element,
     text: ElementOptions<Element>["text"]
 ): void {
-    // Modifies events
+    // Modifies text
     element.innerText = text;
 }
