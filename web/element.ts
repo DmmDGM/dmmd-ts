@@ -45,7 +45,7 @@ export const elementDefaultModifiers: Partial<ElementModifiers<HTMLElement>> = {
     src: modifySrc,
     style: appendStyle,
     text: modifyText
-}
+};
 
 // Defines functions
 /** Creates, initializes, and returns an element with a set of options. */
@@ -73,7 +73,7 @@ export function modify<Element extends HTMLElement>(
 ): void {
     // Modifies element
     const overwrites = Object.assign({}, options);
-    const overwriteNames = Object.getOwnPropertyNames(options);
+    const overwriteNames = Object.getOwnPropertyNames(overwrites);
     for(let i = 0; i < overwriteNames.length; i++) {
         const overwriteName = overwriteNames[i] as keyof typeof overwrites;
         const overwrite = overwrites[overwriteName];
