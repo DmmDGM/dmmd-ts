@@ -1,2 +1,2 @@
 // Exports
-export * as elements from "./element";
+export * as element from "./element";
