@@ -5,6 +5,7 @@
 */
 export type ElementSimplifiedOptions<Element extends HTMLElement> = {
     attributes: { [ attribute: string ]: string };
+    children: HTMLElement[];
     classes: string[];
     events: Partial<{ [ Event in keyof HTMLElementEventMap ]: (
         this: Element,
@@ -27,11 +28,16 @@ export type ElementNativeOptions<Element extends HTMLElement> = { [ Key in keyof
 export type ElementOptions<Element extends HTMLElement> =
     ElementSimplifiedOptions<Element> &
     Omit<ElementNativeOptions<Element>, keyof ElementSimplifiedOptions<Element>>;
+export type ElementModifiers<Element extends HTMLElement> = { [ Option in keyof ElementOptions<Element> ]: (
+    element: Element,
+    option: ElementOptions<Element>[Option]
+) => void };
 
 // Defines constants
 /** Default collection of modifiers. */
-export const elementDefaultModifiers = {
+export const elementDefaultModifiers: Partial<ElementModifiers<HTMLElement>> = {
     attributes: modifyAttributes,
+    children: modifyChildren,
     classes: modifyClasses,
     events: modifyEvents,
     href: modifyHref,
@@ -47,10 +53,8 @@ export const elementDefaultModifiers = {
 export function create<TagName extends keyof HTMLElementTagNameMap>(
     tagName: TagName,
     options: Partial<ElementOptions<HTMLElementTagNameMap[TagName]>> = {},
-    modifiers: Partial<{ [ Key in keyof ElementOptions<HTMLElementTagNameMap[TagName]> ]: (
-        element: HTMLElementTagNameMap[TagName],
-        option: ElementOptions<HTMLElementTagNameMap[TagName]>[Key]
-    ) => void }> = elementDefaultModifiers as typeof modifiers
+    modifiers: Partial<ElementModifiers<HTMLElementTagNameMap[TagName]>> =
+        elementDefaultModifiers as typeof modifiers
 ): HTMLElementTagNameMap[TagName] {
     // Creates element
     const element = document.createElement(tagName);
@@ -66,10 +70,7 @@ export function create<TagName extends keyof HTMLElementTagNameMap>(
 export function modify<Element extends HTMLElement>(
     element: Element,
     options: Partial<ElementOptions<Element>>,
-    modifiers: Partial<{ [ Key in keyof ElementOptions<Element> ]: (
-        element: Element,
-        option: ElementOptions<Element>[Key]
-    ) => void }> = elementDefaultModifiers as typeof modifiers
+    modifiers: Partial<ElementModifiers<Element>> = elementDefaultModifiers as typeof modifiers
 ): void {
     // Modifies element
     const overwrites = Object.assign({}, options);
@@ -99,6 +100,18 @@ export function modifyAttributes<Element extends HTMLElement>(
         const attributeName = attributeNames[i] as keyof typeof attributes & string;
         const attribute = attributes[attributeName];
         element.setAttribute(attributeName, attribute);
+    }
+}
+
+/** Modifies an element's children list. */
+export function modifyChildren<Element extends HTMLElement>(
+    element: Element,
+    children: ElementOptions<Element>["children"]
+): void {
+    // Modifies children
+    for(let i = 0; i < children.length; i++) {
+        const child = children[i];
+        element.appendChild(child);
     }
 }
 
