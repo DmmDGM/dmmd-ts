@@ -14,7 +14,7 @@ export type ElementSimplifiedOptions<Element extends HTMLElement> = {
     href: string;
     html: string;
     id: string;
-    parent: HTMLElement;
+    parent: HTMLElement | null;
     src: string;
     style: Partial<CSSStyleDeclaration>;
     text: string;
@@ -36,10 +36,10 @@ export type ElementModifiers<Element extends HTMLElement> = { [ Option in keyof 
 // Defines constants
 /** Default collection of modifiers. */
 export const elementDefaultModifiers: Partial<ElementModifiers<HTMLElement>> = {
-    attributes: modifyAttributes,
-    children: modifyChildren,
-    classes: modifyClasses,
-    events: modifyEvents,
+    attributes: appendAttributes,
+    children: appendChildren,
+    classes: appendClasses,
+    events: appendEvents,
     href: modifyHref,
     html: modifyHtml,
     id: modifyId,
@@ -89,12 +89,12 @@ export function modify<Element extends HTMLElement>(
     Object.assign(element, overwrites);
 }
 
-/** Modifies an element's attributes */
-export function modifyAttributes<Element extends HTMLElement>(
+/** Appends attributes to an element's attributes list */
+export function appendAttributes<Element extends HTMLElement>(
     element: Element,
     attributes: ElementOptions<Element>["attributes"]
 ): void {
-    // Modifies attributes
+    // Appends attributes
     const attributeNames = Object.getOwnPropertyNames(attributes);
     for(let i = 0; i < attributeNames.length; i++) {
         const attributeName = attributeNames[i] as keyof typeof attributes & string;
@@ -103,42 +103,82 @@ export function modifyAttributes<Element extends HTMLElement>(
     }
 }
 
-/** Modifies an element's children list. */
-export function modifyChildren<Element extends HTMLElement>(
+/** Replaces an element's attributes list */
+export function replaceAttributes<Element extends HTMLElement>(
+    element: Element,
+    attributes: ElementOptions<Element>["attributes"]
+): void {
+    // Replaces attributes
+    for(let i = element.attributes.length - 1; i >= 0; i--)
+        element.removeAttribute(element.attributes[i].name);
+    appendAttributes(element, attributes);
+}
+
+/** Appends children to an element's children list. */
+export function appendChildren<Element extends HTMLElement>(
     element: Element,
     children: ElementOptions<Element>["children"]
 ): void {
-    // Modifies children
+    // Appends children
     for(let i = 0; i < children.length; i++) {
         const child = children[i];
         element.appendChild(child);
     }
 }
 
-/** Modifies an element's class list. */
-export function modifyClasses<Element extends HTMLElement>(
+/** Replaces an element's children list. */
+export function replaceChildren<Element extends HTMLElement>(
+    element: Element,
+    children: ElementOptions<Element>["children"]
+): void {
+    // Replaces children
+    element.replaceChildren(...children);
+}
+
+/** Appends classes to an element's class list. */
+export function appendClasses<Element extends HTMLElement>(
     element: Element,
     classes: ElementOptions<Element>["classes"]
 ): void {
-    // Modifies classes
-    for(let i = 0; i < classes.length; i++) {
-        const token = classes[i];
-        element.classList.add(token);
-    }
+    // Appends classes
+    for(let i = 0; i < classes.length; i++) element.classList.add(classes[i]);
 }
 
-/** Modifies an element's events. */
-export function modifyEvents<Element extends HTMLElement>(
+/** Replaces an element's class list. */
+export function replaceClasses<Element extends HTMLElement>(
+    element: Element,
+    classes: ElementOptions<Element>["classes"]
+): void {
+    // Replaces classes
+    for(let i = element.classList.length - 1; i >= 0; i--)
+        element.classList.remove(element.classList.item(i)!);
+    for(let i = 0; i < classes.length; i++) element.classList.add(classes[i]);
+}
+
+/** Appends events to an element's events. */
+export function appendEvents<Element extends HTMLElement>(
     element: Element,
     events: ElementOptions<Element>["events"]
 ): void {
-    // Modifies events
+    // Appends events
     const eventNames = Object.getOwnPropertyNames(events);
     for(let i = 0; i < eventNames.length; i++) {
         const eventName = eventNames[i] as keyof typeof events & string;
-        const event = Array.isArray(events[eventName]) ? events[eventName] : [ events[eventName] ];
-        for(let j = 0; j < event.length; j++) element.addEventListener(eventName, event[j]);
+        const event = events[eventName];
+        const listeners = Array.isArray(event) ? event : [ event ];
+        for(let j = 0; j < listeners.length; j++) element.addEventListener(eventName, listeners[j]);
     }
+}
+
+/** Replaces an element's events. */
+export function replaceEvents<Element extends HTMLElement>(
+    element: Element,
+    events: ElementOptions<Element>["events"]
+): void {
+    // Replaces events
+    const clone = element.cloneNode(false);
+    element.replaceWith(clone);
+    appendEvents(element, events);
 }
 
 /** Modifies an element's href. */
@@ -174,7 +214,10 @@ export function modifyParent<Element extends HTMLElement>(
     parent: ElementOptions<Element>["parent"]
 ): void {
     // Modifies events
-    parent.appendChild(element);
+    if(parent === null) {
+        if(element.parentElement !== null) element.parentElement.removeChild(element);
+    }
+    else parent.appendChild(element);
 }
 
 /** Modifies an element's src. */
