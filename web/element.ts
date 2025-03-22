@@ -47,6 +47,7 @@ export const elementDefaultModifiers: Partial<ElementModifiers<HTMLElement>> = {
     text: modifyText
 }
 
+// Defines functions
 /** Creates, initializes, and returns an element with a set of options. */
 export function create<TagName extends keyof HTMLElementTagNameMap>(
     tagName: TagName,

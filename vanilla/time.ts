@@ -1,3 +1,4 @@
+// Defines functions
 /** Creates and returns a callback function, which returns the time elapsed time since the initialization function is
  *  called. */
 export function beep(): () => number {
