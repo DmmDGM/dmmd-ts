@@ -1,14 +1,10 @@
 {
-	"dependencies": {
-		"chalk": "^5.4.1",
-		"dmmd-ts": "."
-	},
+	"name": "dmmd-ts",
 	"devDependencies": {
 		"@types/bun": "latest"
 	},
-	"name": "dmmd-ts",
 	"peerDependencies": {
-		"typescript": "^5.0.0"
+		"typescript": "^5.8.2"
 	},
 	"scripts": {
 		"build": "bun build . --outfile index.js --minify"
