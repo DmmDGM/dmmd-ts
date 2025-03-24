@@ -43,7 +43,7 @@ export const z = (query: string, properties: object): HTMLElement =>
     // @ts-ignore
     modify(page[querySelector](query) as HTMLElement, properties);
 
-/** Query selects assigns properties to multiple elements. */
+/** Query selects and assigns properties to multiple elements. */
 export const zs = (query: string, properties: object): HTMLElement[] => {
     // Iterates elements
     // @ts-ignore
