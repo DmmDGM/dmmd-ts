@@ -1,14 +1,28 @@
 // Defines types
-/** Collection of custom options for element modification.
- * 
- *  Please prefer `ElementOption<Element>` unless you know what you are doing. */
-export type ElementCustomOptions<Element extends HTMLElement> = {
-    attributes: { [ attribute: string ]: string };
+/** Element event listener. */
+export type ElementListener<
+    TargetElement extends HTMLElement,
+    EventName extends keyof HTMLElementEventMap
+> = ((this: TargetElement, event: HTMLElementEventMap[EventName]) => any) & EventListener;
+
+/** Options for modifying element. */
+export type ElementOptions<TargetElement extends HTMLElement> =
+    ElementShortcuts<TargetElement> &
+    Omit<ElementProperties<TargetElement>, keyof ElementShortcuts<TargetElement>>;
+
+/** Native element properties. */
+export type ElementProperties<TargetElement extends HTMLElement> = {
+    [Key in keyof TargetElement]: TargetElement[Key]
+};
+
+/** Custom element shortcuts. */
+export type ElementShortcuts<TargetElement extends HTMLElement> = {
+    attributes: { [attribute: string]: string };
     children: HTMLElement[] | HTMLElement;
-    classes: string[];
-    events: Partial<{ [ Event in keyof HTMLElementEventMap ]:
-            ElementEventListener<Element, Event>[] |
-            ElementEventListener<Element, Event>
+    classes: string[] | string;
+    events: Partial<{ [EventName in keyof HTMLElementEventMap]:
+        ElementListener<TargetElement, EventName>[] |
+        ElementListener<TargetElement, EventName>
     }>;
     href: string;
     html: string;
@@ -19,336 +33,194 @@ export type ElementCustomOptions<Element extends HTMLElement> = {
     text: string;
 };
 
-/** Event listener callback. */
-export type ElementEventListener<
-    Element extends HTMLElement,
-    EventName extends keyof HTMLElementEventMap
-> = (
-    this: Element,
-    event: HTMLElementEventMap[EventName]
-) => any;
-
-/** Element modifier. */
-export type ElementModifier<
-    Element extends HTMLElement,
-    OptionName extends keyof ElementOptions<Element>
-> = (
-    element: Element,
-    option: ElementOptions<Element>[OptionName]
-) => void;
-
-/** Collection of element modifiers. */
-export type ElementModifiers<Element extends HTMLElement> = {
-    [ OptionName in keyof ElementOptions<Element> ]: ElementModifier<Element, OptionName>
-};
-
-/** Collection of native options for element modification.
- * 
- *  Please prefer `ElementOption<Element>` unless you know what you are doing. */
-export type ElementNativeOptions<Element extends HTMLElement> = {
-    [ Key in keyof Element ]: Element[Key]
-};
-
-/** Collection of options with custom shortcuts for element modification. */
-export type ElementOptions<Element extends HTMLElement> =
-    ElementCustomOptions<Element> &
-    Omit<ElementNativeOptions<Element>, keyof ElementCustomOptions<Element>>;
-
-// Defines constants
-/** Default collection of modifiers. */
-export const elementDefaultModifiers = {
-    attributes: appendAttributes,
-    children: appendChildren,
-    classes: appendClasses,
-    events: appendEvents,
-    href: replaceHref,
-    html: replaceHtml,
-    id: replaceId,
-    parent: replaceParent,
-    src: replaceSrc,
-    style: appendStyle,
-    text: replaceText
-} as const;
-
 // Defines functions
-/** Appends attributes to an element's attribute list. */
-export function appendAttributes<Element extends HTMLElement>(
-    element: Element,
-    attributes: ElementOptions<Element>["attributes"]
-): void {
-    // Appends attributes
-    const attributeNames = Object.getOwnPropertyNames(attributes);
-    for(let i = 0; i < attributeNames.length; i++) {
-        const attributeName = attributeNames[i] as keyof typeof attributes & string;
-        const attribute = attributes[attributeName];
-        element.setAttribute(attributeName, attribute);
-    }
-}
-
-/** Appends children to an element's children. */
-export function appendChildren<Element extends HTMLElement>(
-    element: Element,
-    children: ElementOptions<Element>["children"]
-): void {
-    // Appends children
-    const list = Array.isArray(children) ? children : [ children ];
-    for(let i = 0; i < list.length; i++) {
-        const child = list[i];
-        element.appendChild(child);
-    }
-}
-
-/** Appends classes to an element's class list. */
-export function appendClasses<Element extends HTMLElement>(
-    element: Element,
-    classes: ElementOptions<Element>["classes"]
-): void {
-    // Appends classes
-    for(let i = 0; i < classes.length; i++) element.classList.add(classes[i]);
-}
-
-/** Appends events to an element's events. */
-export function appendEvents<Element extends HTMLElement>(
-    element: Element,
-    events: ElementOptions<Element>["events"]
-): void {
-    // Appends events
-    const eventNames = Object.getOwnPropertyNames(events);
-    for(let i = 0; i < eventNames.length; i++) {
-        const eventName = eventNames[i] as keyof typeof events & string;
-        const event = events[eventName];
-        const listeners = Array.isArray(event) ? event : [ event ];
-        for(let j = 0; j < listeners.length; j++) element.addEventListener(eventName, listeners[j]);
-    }
-}
-
-/** Appends stlye to an element's style. */
-export function appendStyle<Element extends HTMLElement>(
-    element: Element,
-    style: ElementOptions<Element>["style"]
-): void {
-    // Appensd style
-    Object.assign(element.style, style);
-}
-
-/** Clears an element's attribute list. */
-export function clearAttributes<Element extends HTMLElement>(
-    element: Element
-): never {
-    throw new Error("Not implemented.");
-}
-
-/** Clears an element's children. */
-export function clearChildren<Element extends HTMLElement>(
-    element: Element
-): never {
-    throw new Error("Not implemented.");
-}
-
-/** Clears an element's class list. */
-export function clearClasses<Element extends HTMLElement>(
-    element: Element
-): never {
-    throw new Error("Not implemented.");
-}
-
-/** Clears an element's events. */
-export function clearEvents<Element extends HTMLElement>(
-    element: Element
-): never {
-    throw new Error("Not implemented.");
-}
-
-/** Clears an element's estyle. */
-export function clearStyle<Element extends HTMLElement>(
-    element: Element
-): never {
-    throw new Error("Not implemented.");
-}
-
-/** Creates, initializes, and returns an element with a set of options. */
+/** Creates and initializes element. */
 export function create<TagName extends keyof HTMLElementTagNameMap>(
     tagName: TagName,
-    options: Partial<ElementOptions<HTMLElementTagNameMap[TagName]>> = {},
-    modifiers: Partial<ElementModifiers<HTMLElementTagNameMap[TagName]>> =
-        elementDefaultModifiers as typeof modifiers
+    options: Partial<ElementOptions<HTMLElementTagNameMap[TagName]>>
 ): HTMLElementTagNameMap[TagName] {
-    // Creates element
-    const element = document.createElement(tagName);
-
-    // Initializes element
-    modify(element, options, modifiers);
-
-    // Returns element
-    return element;
+    // Creates and returns element
+    return modify(document.createElement(tagName), options);
 }
 
-/** Deletes attributes from an element's attribute list. */
-export function deleteAttributes<Element extends HTMLElement>(
-    element: Element,
-    attributes: ElementOptions<Element>["attributes"]
-): never {
-    throw new Error("Not implemented.");
-}
+/** Modifies element. */
+export function modify<TargetElement extends HTMLElement>(
+    targetElement: TargetElement,
+    options: Partial<ElementOptions<TargetElement>>
+): TargetElement {
+    // Modifies element
+    type Shortcuts = ElementShortcuts<TargetElement>;
+    const optionNames = Object.getOwnPropertyNames(options);
+    for (let i = 0; i < optionNames.length; i++) {
+        // Handles option
+        const optionName = optionNames[i] as keyof typeof options;
+        switch (optionName) {
+            // Handles attributes
+            case "attributes": {
+                // Removes attributes
+                for (let j = targetElement.attributes.length - 1; j >= 0; j--) {
+                    const attribute = targetElement.attributes.item(j);
+                    if (attribute === null) continue;
+                    targetElement.removeAttribute(attribute.name);
+                }
 
-/** Deletes children from an element's children. */
-export function deleteChildren<Element extends HTMLElement>(
-    element: Element,
-    children: ElementOptions<Element>["children"]
-): never {
-    throw new Error("Not implemented.");
-}
+                // Appends attributes
+                const attributes = (options[optionName] ?? {}) as Shortcuts["attributes"];
+                const attributeNames = Object.getOwnPropertyNames(attributes);
+                for (let j = 0; j < attributeNames.length; j++) {
+                    const attributeName = attributeNames[j] as string & keyof typeof attributes;
+                    const attribute = attributes[attributeName];
+                    targetElement.setAttribute(attributeName, attribute);
+                }
 
-/** Deletes classes from an element's class list. */
-export function deleteClasses<Element extends HTMLElement>(
-    element: Element,
-    classes: ElementOptions<Element>["classes"]
-): never {
-    throw new Error("Not implemented.");
-}
+                // Breaks
+                break;
+            }
 
-/** Deletes events from an element's events. */
-export function deleteEvents<Element extends HTMLElement>(
-    element: Element,
-    events: ElementOptions<Element>["events"]
-): never {
-    throw new Error("Not implemented.");
-}
+            // Handles children
+            case "children": {
+                // Replaces children
+                const children = (options[optionName] ?? []) as Shortcuts["children"];
+                Array.isArray(children) ?
+                    targetElement.replaceChildren(...children) :
+                    targetElement.replaceChildren(children);
 
-/** Deletes style from an element's styles. */
-export function deleteStyle<Element extends HTMLElement>(
-    element: Element,
-    style: ElementOptions<Element>["style"]
-): never {
-    throw new Error("Not implemented.");
-}
+                // Breaks
+                break;
+            }
 
-/** Replaces an element with a set of options. */
-export function modify<Element extends HTMLElement>(
-    element: Element,
-    options: Partial<ElementOptions<Element>>,
-    modifiers: Partial<ElementModifiers<Element>> = elementDefaultModifiers as typeof modifiers
-): void {
-    // Replaces element
-    const overwrites = Object.assign({}, options);
-    const overwriteNames = Object.getOwnPropertyNames(overwrites);
-    for(let i = 0; i < overwriteNames.length; i++) {
-        const overwriteName = overwriteNames[i] as keyof typeof overwrites;
-        const overwrite = overwrites[overwriteName];
-        if(typeof overwrite === "undefined") continue;
-        if(overwriteName in modifiers) {
-            delete overwrites[overwriteName];
-            const modifier = modifiers[overwriteName] as ElementModifier<Element, typeof overwriteName>;
-            if(typeof modifier === "undefined") continue;
-            modifier(element, overwrite as ElementOptions<Element>[typeof overwriteName]);
+            // Handles classes
+            case "classes": {
+                // Removes classes
+                targetElement.classList = "";
+
+                // Appends classes
+                const classes = (options[optionName] ?? []) as Shortcuts["classes"];
+                if (Array.isArray(classes)) {
+                    for (let j = 0; j < classes.length; j++) {
+                        const token = classes[j];
+                        targetElement.classList.add(token);
+                    }
+                }
+                else targetElement.classList.add(classes);
+
+                // Breaks
+                break;
+            }
+
+            // Handles events
+            case "events": {
+                // Removes events
+                const clone = targetElement.cloneNode();
+                const children = targetElement.children;
+                targetElement.replaceWith(clone);
+                targetElement.replaceChildren(...Array.from(children));
+
+                // Appends events
+                const events = (options[optionName] ?? {}) as Shortcuts["events"];
+                const eventNames = Object.getOwnPropertyNames(events);
+                for (let j = 0; j < eventNames.length; j++) {
+                    const eventName = eventNames[j] as keyof typeof events;
+                    const event = events[eventName] ?? (() => {});
+                    if (Array.isArray(event)) {
+                        for (let k = 0; k < event.length; k++) {
+                            const listener = event[k];
+                            targetElement.addEventListener(eventName, listener);
+                        }
+                    }
+                    else targetElement.addEventListener(eventName, event);
+                }
+
+                // Breaks
+                break;
+            }
+
+            // Handles href
+            case "href": {
+                // Replaces href
+                const href = (options[optionName] ?? "") as Shortcuts["href"];
+                if("href" in targetElement) targetElement.href = href;
+
+                // Breaks
+                break;
+            }
+
+            // Handles html
+            case "html": {
+                // Replaces html
+                const html = (options[optionName] ?? "") as Shortcuts["html"];
+                targetElement.innerHTML = html;
+
+                // Breaks
+                break;
+            }
+
+            // Handles id
+            case "id": {
+                // Replaces id
+                const id = (options[optionName] ?? "") as Shortcuts["id"];
+                targetElement.id = id;
+
+                // Breaks
+                break;
+            }
+
+            // Handles parent
+            case "parent": {
+                // Replaces parent
+                const parent = (options[optionName] ?? null) as Shortcuts["parent"];
+                if(parent === null && targetElement.parentElement !== null)
+                    targetElement.parentElement.removeChild(targetElement);
+                else if(parent !== null) parent.appendChild(targetElement);
+
+                // Breaks
+                break;
+            }
+
+            // Handles src
+            case "src": {
+                // Replaces src
+                const src = (options[optionName] ?? "") as Shortcuts["src"];
+                if("src" in targetElement) targetElement.src = src;
+
+                // Breaks
+                break;
+            }
+
+            // Handles style
+            case "style": {
+                // Replaces style
+                targetElement.style = "";
+                const style = (options[optionName] ?? {}) as Shortcuts["style"];
+                Object.assign(targetElement.style, style);
+
+                // Breaks
+                break;
+            }
+
+            // Handles text
+            case "text": {
+                // Replaces text
+                const text = (options[optionName] ?? "") as Shortcuts["text"];
+                targetElement.innerText = text;
+
+                // Breaks
+                break;
+            }
+
+            // Handles properties
+            default: {
+                // Replaces properties
+                type Properties = ElementProperties<TargetElement>;
+                const property = (options[optionName] ?? void 0) as Properties[typeof optionName];
+                targetElement[optionName] = property;
+
+                // Breaks
+                break;
+            }
         }
     }
-    Object.assign(element, overwrites);
-}
 
-/** Replaces an element's attribute list. */
-export function replaceAttributes<Element extends HTMLElement>(
-    element: Element,
-    attributes: ElementOptions<Element>["attributes"]
-): void {
-    // Replaces attributes
-    for(let i = element.attributes.length - 1; i >= 0; i--)
-        element.removeAttribute(element.attributes[i].name);
-    appendAttributes(element, attributes);
-}
-
-/** Replaces an element's children. */
-export function replaceChildren<Element extends HTMLElement>(
-    element: Element,
-    children: ElementOptions<Element>["children"]
-): void {
-    // Replaces children
-    const list = Array.isArray(children) ? children : [ children ];
-    element.replaceChildren(...list);
-}
-
-/** Replaces an element's class list. */
-export function replaceClasses<Element extends HTMLElement>(
-    element: Element,
-    classes: ElementOptions<Element>["classes"]
-): void {
-    // Replaces classes
-    element.classList = "";
-    for(let i = 0; i < classes.length; i++) element.classList.add(classes[i]);
-}
-
-/** Replaces an element's events. */
-export function replaceEvents<Element extends HTMLElement>(
-    element: Element,
-    events: ElementOptions<Element>["events"]
-): void {
-    // Replaces events
-    const clone = element.cloneNode(false);
-    element.replaceWith(clone);
-    appendEvents(element, events);
-}
-
-/** Replaces an element's href. */
-export function replaceHref<Element extends HTMLElement>(
-    element: Element,
-    href: ElementOptions<Element>["href"]
-): void {
-    // Replaces href
-    element.setAttribute("href", href);
-}
-
-/** Replaces an element's inner html. */
-export function replaceHtml<Element extends HTMLElement>(
-    element: Element,
-    html: ElementOptions<Element>["html"]
-): void {
-    // Replaces html
-    element.innerHTML = html;
-}
-
-/** Replaces an element's id. */
-export function replaceId<Element extends HTMLElement>(
-    element: Element,
-    id: ElementOptions<Element>["id"]
-): void {
-    // Replaces id
-    element.id = id;
-}
-
-/** Replaces an element's parent. */
-export function replaceParent<Element extends HTMLElement>(
-    element: Element,
-    parent: ElementOptions<Element>["parent"]
-): void {
-    // Replaces parent
-    if(parent !== null) parent.appendChild(element);
-    else if(element.parentElement !== null) element.parentElement.removeChild(element);
-}
-
-/** Replaces an element's src. */
-export function replaceSrc<Element extends HTMLElement>(
-    element: Element,
-    src: ElementOptions<Element>["src"]
-): void {
-    // Replaces src
-    element.setAttribute("src", src);
-}
-
-/** Replaces an element's style. */
-export function replaceStyle<Element extends HTMLElement>(
-    element: Element,
-    style: ElementOptions<Element>["style"]
-): void {
-    // Replaces style
-    element.style = "";
-    appendStyle(element, style);
-}
-
-/** Replaces an element's inner text. */
-export function replaceText<Element extends HTMLElement>(
-    element: Element,
-    text: ElementOptions<Element>["text"]
-): void {
-    // Replaces text
-    element.innerText = text;
+    // Returns element
+    return targetElement;
 }
