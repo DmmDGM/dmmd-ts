@@ -29,6 +29,7 @@ export type ElementShortcuts<TargetElement extends HTMLElement> = {
     }>;
     html: string;
     parent: HTMLElement | null;
+    style: Partial<CSSStyleDeclaration>;
     text: string;
 };
 
@@ -36,9 +37,9 @@ export type ElementShortcuts<TargetElement extends HTMLElement> = {
 /** Appends properties to element. */
 export function append<TargetElement extends HTMLElement>(
     targetElement: TargetElement,
-    options: Partial<ElementOptions<TargetElement>>
+    options: Partial<ElementShortcuts<TargetElement>>
 ): TargetElement {
-    // Modifies element
+    // Appends properties to element
     type Shortcuts = ElementShortcuts<TargetElement>;
     const optionNames = Object.getOwnPropertyNames(options);
     for(let i = 0; i < optionNames.length; i++) {
@@ -133,45 +134,21 @@ export function append<TargetElement extends HTMLElement>(
                 break;
             }
 
-            // Handles text
-            case "text": {
-                // Appends text
-                const text = (options[optionName] ?? "") as Shortcuts["text"];
-                targetElement.innerText += text;
+            // Handles style
+            case "style": {
+                // Appends style
+                const style = (options[optionName] ?? {}) as Shortcuts["style"];
+                Object.assign(targetElement.style, style);
 
                 // Breaks
                 break;
             }
 
-            // Handles properties
-            default: {
-                // Appends properties
-                type Properties = ElementProperties<TargetElement>;
-                const property = options[optionName] as Properties[typeof optionName];
-                if(typeof targetElement[optionName] !== typeof property)
-                    targetElement[optionName] = property;
-                else switch(typeof targetElement[optionName]) {
-                    case "bigint": {
-                        (targetElement[optionName] as bigint) += property as bigint;
-                        break;
-                    }
-                    case "number": {
-                        (targetElement[optionName] as number) += property as number;
-                        break;
-                    }
-                    case "object": {
-                        deepMerge(targetElement[optionName] as object, property as object);
-                        break;
-                    }
-                    case "string": {
-                        (targetElement[optionName] as string) += property as string;
-                        break;
-                    }
-                    default: {
-                        targetElement[optionName] = property;
-                        break;
-                    }
-                }
+            // Handles text
+            case "text": {
+                // Appends text
+                const text = (options[optionName] ?? "") as Shortcuts["text"];
+                targetElement.innerText += text;
 
                 // Breaks
                 break;
@@ -306,6 +283,17 @@ export function modify<TargetElement extends HTMLElement>(
                 break;
             }
 
+            // Handles style
+            case "style": {
+                // Replaces style
+                targetElement.style = "";
+                const style = (options[optionName] ?? {}) as Shortcuts["style"];
+                Object.assign(targetElement.style, style);
+
+                // Breaks
+                break;
+            }
+
             // Handles text
             case "text": {
                 // Replaces text
@@ -322,6 +310,161 @@ export function modify<TargetElement extends HTMLElement>(
                 type Properties = ElementProperties<TargetElement>;
                 const property = options[optionName] as Properties[typeof optionName];
                 targetElement[optionName] = property;
+
+                // Breaks
+                break;
+            }
+        }
+    }
+
+    // Returns element
+    return targetElement;
+}
+
+/** Removes properties from element. */
+export function remove<TargetElement extends HTMLElement>(
+    targetElement: TargetElement,
+    options: Partial<ElementShortcuts<TargetElement> | {
+        attributes: string[] | string;
+        events: string[] | string;
+        style: string[] | string;
+    }>
+): TargetElement {
+    // Removes properties from element
+    type Shortcuts = ElementShortcuts<TargetElement>;
+    const optionNames = Object.getOwnPropertyNames(options);
+    for(let i = 0; i < optionNames.length; i++) {
+        // Handles option
+        const optionName = optionNames[i] as keyof typeof options;
+        switch(optionName) {
+            // Handles attributes
+            case "attributes": {
+                // Removes attributes
+                const attributes = (options[optionName] ?? {}) as Shortcuts["attributes"];
+                const attributeNames = Object.getOwnPropertyNames(attributes);
+                for(let j = 0; j < attributeNames.length; j++) {
+                    const attributeName = attributeNames[j] as string & keyof typeof attributes;
+                    const attribute = attributes[attributeName];
+                    if(targetElement.getAttribute(attributeName) === attribute)
+                        targetElement.removeAttribute(attributeName);
+                }
+
+                // Breaks
+                break;
+            }
+
+            // Handles children
+            case "children": {
+                // Removes children
+                const children = (options[optionName] ?? []) as Shortcuts["children"];
+                if(Array.isArray(children)) {
+                    for(let j = 0; j < children.length; j++) {
+                        const child = children[j];
+                        targetElement.removeChild(child);
+                    }
+                }
+                else targetElement.removeChild(children);
+
+                // Breaks
+                break;
+            }
+
+            // Handles classes
+            case "classes": {
+                // Removes classes
+                const classes = (options[optionName] ?? []) as Shortcuts["classes"];
+                if(Array.isArray(classes)) {
+                    for(let j = 0; j < classes.length; j++) {
+                        const token = classes[j];
+                        targetElement.classList.remove(token);
+                    }
+                }
+                else targetElement.classList.remove(classes);
+
+                // Breaks
+                break;
+            }
+
+            // Handles events
+            case "events": {
+                // Appends events
+                const events = (options[optionName] ?? {}) as Shortcuts["events"];
+                const eventNames = Object.getOwnPropertyNames(events);
+                for(let j = 0; j < eventNames.length; j++) {
+                    const eventName = eventNames[j] as keyof typeof events;
+                    const event = events[eventName] ?? (() => {});
+                    if(Array.isArray(event)) {
+                        for(let k = 0; k < event.length; k++) {
+                            const listener = event[k];
+                            targetElement.addEventListener(eventName, listener);
+                        }
+                    }
+                    else targetElement.addEventListener(eventName, event);
+                }
+
+                // Breaks
+                break;
+            }
+
+            // Handles html
+            case "html": {
+                // Appends html
+                const html = (options[optionName] ?? "") as Shortcuts["html"];
+                targetElement.innerHTML += html;
+
+                // Breaks
+                break;
+            }
+
+            // Handles parent
+            case "parent": {
+                // Appends parent
+                const parent = (options[optionName] ?? null) as Shortcuts["parent"];
+                if(parent !== null) parent.appendChild(targetElement);
+
+                // Breaks
+                break;
+            }
+
+            // Handles text
+            case "text": {
+                // Appends text
+                const text = (options[optionName] ?? "") as Shortcuts["text"];
+                targetElement.innerText += text;
+
+                // Breaks
+                break;
+            }
+
+            // Handles properties
+            default: {
+                // Appends properties
+                type Properties = ElementProperties<TargetElement>;
+                const property = options[optionName] as Properties[typeof optionName];
+                if(typeof targetElement[optionName] !== typeof property)
+                    targetElement[optionName] = property;
+                else switch(typeof targetElement[optionName]) {
+                    case "bigint": {
+                        (targetElement[optionName] as bigint) += property as bigint;
+                        break;
+                    }
+                    case "number": {
+                        (targetElement[optionName] as number) += property as number;
+                        break;
+                    }
+                    case "object": {
+                        deepMerge(targetElement[optionName] as object, property as object);
+                        break;
+                    }
+                    case "string": {
+                        (targetElement[optionName] as string) += property as string;
+                        break;
+                    }
+                    default: {
+                        targetElement[optionName] = property;
+                        break;
+                    }
+                }
 
                 // Breaks
                 break;
