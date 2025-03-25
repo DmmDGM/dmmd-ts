@@ -1,9 +1,11 @@
 // Defines classes
 export class Queue<Element extends unknown> {
-    set: Set<Element>;
+    private _array: Element[] | null;
+    private _set: Set<Element>;
 
     constructor() {
-        this.set = new Set();
+        this._array = null;
+        this._set = new Set();
     }
 
     clear(): void {
@@ -25,4 +27,6 @@ export class Queue<Element extends unknown> {
     test(element: Element): boolean {
         return false;
     }
+
+    toSet()
 }
