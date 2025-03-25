@@ -324,6 +324,35 @@ export function modify<TargetElement extends HTMLElement>(
     return targetElement;
 }
 
+/** Queries and modifies an element. */
+export function query<TargetElement extends HTMLElement>(
+    query: string,
+    options: Partial<ElementOptions<TargetElement>>
+): TargetElement | null {
+    // Queries element
+    const targetElement: TargetElement | null = document.querySelector(query);
+
+    // Modifies and returns element
+    return targetElement === null ? null : modify(targetElement, options);
+}
+
+/** Queries and modifies multiple elements. */
+export function queryAll<TargetElement extends HTMLElement>(
+    query: string,
+    options: Partial<ElementOptions<TargetElement>>
+): TargetElement[] {
+    // Queries elements
+    const targetElementsList: NodeListOf<TargetElement> = document.querySelectorAll(query);
+    const targetElements: TargetElement[] = [];
+
+    // Modifies elements
+    for(let i = 0; i < targetElementsList.length; i++)
+        targetElements.push(modify(targetElementsList.item(i), options));
+
+    // Returns elements
+    return targetElements;
+}
+
 /** Removes properties from element. */
 export function remove<TargetElement extends HTMLElement>(
     targetElement: TargetElement,
