@@ -1,6 +1,3 @@
-// Imports
-import { deepMerge } from "../vanilla/object";
-
 // Defines types
 /** Element event listener. */
 export type ElementListener<
@@ -40,7 +37,7 @@ export function append<TargetElement extends HTMLElement>(
     options: Partial<ElementShortcuts<TargetElement>>
 ): TargetElement {
     // Appends properties to element
-    type Shortcuts = ElementShortcuts<TargetElement>;
+    type Shortcuts = Required<typeof options>;
     const optionNames = Object.getOwnPropertyNames(options);
     for(let i = 0; i < optionNames.length; i++) {
         // Handles option
@@ -175,7 +172,7 @@ export function modify<TargetElement extends HTMLElement>(
     options: Partial<ElementOptions<TargetElement>>
 ): TargetElement {
     // Modifies element
-    type Shortcuts = ElementShortcuts<TargetElement>;
+    type Options = Required<typeof options>;
     const optionNames = Object.getOwnPropertyNames(options);
     for(let i = 0; i < optionNames.length; i++) {
         // Handles option
@@ -191,7 +188,7 @@ export function modify<TargetElement extends HTMLElement>(
                 }
 
                 // Appends attributes
-                const attributes = (options[optionName] ?? {}) as Shortcuts["attributes"];
+                const attributes = (options[optionName] ?? {}) as NonNullable<Options["attributes"]>;
                 const attributeNames = Object.getOwnPropertyNames(attributes);
                 for(let j = 0; j < attributeNames.length; j++) {
                     const attributeName = attributeNames[j] as string & keyof typeof attributes;
@@ -206,7 +203,7 @@ export function modify<TargetElement extends HTMLElement>(
             // Handles children
             case "children": {
                 // Replaces children
-                const children = (options[optionName] ?? []) as Shortcuts["children"];
+                const children = (options[optionName] ?? []) as NonNullable<Options["children"]>;
                 Array.isArray(children) ?
                     targetElement.replaceChildren(...children) :
                     targetElement.replaceChildren(children);
@@ -221,7 +218,7 @@ export function modify<TargetElement extends HTMLElement>(
                 targetElement.classList = "";
 
                 // Appends classes
-                const classes = (options[optionName] ?? []) as Shortcuts["classes"];
+                const classes = (options[optionName] ?? []) as NonNullable<Options["classes"]>;
                 if(Array.isArray(classes)) {
                     for(let j = 0; j < classes.length; j++) {
                         const token = classes[j];
@@ -243,7 +240,7 @@ export function modify<TargetElement extends HTMLElement>(
                 targetElement.replaceChildren(...Array.from(children));
 
                 // Appends events
-                const events = (options[optionName] ?? {}) as Shortcuts["events"];
+                const events = (options[optionName] ?? {}) as NonNullable<Options["events"]>;
                 const eventNames = Object.getOwnPropertyNames(events);
                 for(let j = 0; j < eventNames.length; j++) {
                     const eventName = eventNames[j] as keyof typeof events;
@@ -264,7 +261,7 @@ export function modify<TargetElement extends HTMLElement>(
             // Handles html
             case "html": {
                 // Replaces html
-                const html = (options[optionName] ?? "") as Shortcuts["html"];
+                const html = (options[optionName] ?? "") as NonNullable<Options["html"]>;
                 targetElement.innerHTML = html;
 
                 // Breaks
@@ -274,7 +271,7 @@ export function modify<TargetElement extends HTMLElement>(
             // Handles parent
             case "parent": {
                 // Replaces parent
-                const parent = (options[optionName] ?? null) as Shortcuts["parent"];
+                const parent = (options[optionName] ?? null) as NonNullable<Options["parent"]>;
                 if(parent === null && targetElement.parentElement !== null)
                     targetElement.parentElement.removeChild(targetElement);
                 else if(parent !== null) parent.appendChild(targetElement);
@@ -287,7 +284,7 @@ export function modify<TargetElement extends HTMLElement>(
             case "style": {
                 // Replaces style
                 targetElement.style = "";
-                const style = (options[optionName] ?? {}) as Shortcuts["style"];
+                const style = (options[optionName] ?? {}) as NonNullable<Options["style"]>;
                 Object.assign(targetElement.style, style);
 
                 // Breaks
@@ -297,7 +294,7 @@ export function modify<TargetElement extends HTMLElement>(
             // Handles text
             case "text": {
                 // Replaces text
-                const text = (options[optionName] ?? "") as Shortcuts["text"];
+                const text = (options[optionName] ?? "") as NonNullable<Options["text"]>;
                 targetElement.innerText = text;
 
                 // Breaks
@@ -324,14 +321,14 @@ export function modify<TargetElement extends HTMLElement>(
 /** Removes properties from element. */
 export function remove<TargetElement extends HTMLElement>(
     targetElement: TargetElement,
-    options: Partial<ElementShortcuts<TargetElement> | {
+    options: Partial<ElementShortcuts<TargetElement> & {
         attributes: string[] | string;
         events: string[] | string;
         style: string[] | string;
     }>
 ): TargetElement {
     // Removes properties from element
-    type Shortcuts = ElementShortcuts<TargetElement>;
+    type Shortcuts = typeof options;
     const optionNames = Object.getOwnPropertyNames(options);
     for(let i = 0; i < optionNames.length; i++) {
         // Handles option
