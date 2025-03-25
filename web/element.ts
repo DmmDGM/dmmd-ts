@@ -1,3 +1,6 @@
+// Imports
+import { deepMerge } from "../vanilla/object";
+
 // Defines types
 /** Element event listener. */
 export type ElementListener<
@@ -38,16 +41,16 @@ export function append<TargetElement extends HTMLElement>(
     // Modifies element
     type Shortcuts = ElementShortcuts<TargetElement>;
     const optionNames = Object.getOwnPropertyNames(options);
-    for (let i = 0; i < optionNames.length; i++) {
+    for(let i = 0; i < optionNames.length; i++) {
         // Handles option
         const optionName = optionNames[i] as keyof typeof options;
-        switch (optionName) {
+        switch(optionName) {
             // Handles attributes
             case "attributes": {
                 // Appends attributes
                 const attributes = (options[optionName] ?? {}) as Shortcuts["attributes"];
                 const attributeNames = Object.getOwnPropertyNames(attributes);
-                for (let j = 0; j < attributeNames.length; j++) {
+                for(let j = 0; j < attributeNames.length; j++) {
                     const attributeName = attributeNames[j] as string & keyof typeof attributes;
                     const attribute = attributes[attributeName];
                     targetElement.setAttribute(attributeName, attribute);
@@ -77,8 +80,8 @@ export function append<TargetElement extends HTMLElement>(
             case "classes": {
                 // Appends classes
                 const classes = (options[optionName] ?? []) as Shortcuts["classes"];
-                if (Array.isArray(classes)) {
-                    for (let j = 0; j < classes.length; j++) {
+                if(Array.isArray(classes)) {
+                    for(let j = 0; j < classes.length; j++) {
                         const token = classes[j];
                         targetElement.classList.add(token);
                     }
@@ -94,11 +97,11 @@ export function append<TargetElement extends HTMLElement>(
                 // Appends events
                 const events = (options[optionName] ?? {}) as Shortcuts["events"];
                 const eventNames = Object.getOwnPropertyNames(events);
-                for (let j = 0; j < eventNames.length; j++) {
+                for(let j = 0; j < eventNames.length; j++) {
                     const eventName = eventNames[j] as keyof typeof events;
                     const event = events[eventName] ?? (() => {});
-                    if (Array.isArray(event)) {
-                        for (let k = 0; k < event.length; k++) {
+                    if(Array.isArray(event)) {
+                        for(let k = 0; k < event.length; k++) {
                             const listener = event[k];
                             targetElement.addEventListener(eventName, listener);
                         }
@@ -122,11 +125,9 @@ export function append<TargetElement extends HTMLElement>(
 
             // Handles parent
             case "parent": {
-                // Replaces parent
+                // Appends parent
                 const parent = (options[optionName] ?? null) as Shortcuts["parent"];
-                if(parent === null && targetElement.parentElement !== null)
-                    targetElement.parentElement.removeChild(targetElement);
-                else if(parent !== null) parent.appendChild(targetElement);
+                if(parent !== null) parent.appendChild(targetElement);
 
                 // Breaks
                 break;
@@ -134,9 +135,9 @@ export function append<TargetElement extends HTMLElement>(
 
             // Handles text
             case "text": {
-                // Replaces text
+                // Appends text
                 const text = (options[optionName] ?? "") as Shortcuts["text"];
-                targetElement.innerText = text;
+                targetElement.innerText += text;
 
                 // Breaks
                 break;
@@ -144,10 +145,33 @@ export function append<TargetElement extends HTMLElement>(
 
             // Handles properties
             default: {
-                // Replaces properties
+                // Appends properties
                 type Properties = ElementProperties<TargetElement>;
                 const property = options[optionName] as Properties[typeof optionName];
-                targetElement[optionName] = property;
+                if(typeof targetElement[optionName] !== typeof property)
+                    targetElement[optionName] = property;
+                else switch(typeof targetElement[optionName]) {
+                    case "bigint": {
+                        (targetElement[optionName] as bigint) += property as bigint;
+                        break;
+                    }
+                    case "number": {
+                        (targetElement[optionName] as number) += property as number;
+                        break;
+                    }
+                    case "object": {
+                        deepMerge(targetElement[optionName] as object, property as object);
+                        break;
+                    }
+                    case "string": {
+                        (targetElement[optionName] as string) += property as string;
+                        break;
+                    }
+                    default: {
+                        targetElement[optionName] = property;
+                        break;
+                    }
+                }
 
                 // Breaks
                 break;
@@ -176,23 +200,23 @@ export function modify<TargetElement extends HTMLElement>(
     // Modifies element
     type Shortcuts = ElementShortcuts<TargetElement>;
     const optionNames = Object.getOwnPropertyNames(options);
-    for (let i = 0; i < optionNames.length; i++) {
+    for(let i = 0; i < optionNames.length; i++) {
         // Handles option
         const optionName = optionNames[i] as keyof typeof options;
-        switch (optionName) {
+        switch(optionName) {
             // Handles attributes
             case "attributes": {
                 // Removes attributes
-                for (let j = targetElement.attributes.length - 1; j >= 0; j--) {
+                for(let j = targetElement.attributes.length - 1; j >= 0; j--) {
                     const attribute = targetElement.attributes.item(j);
-                    if (attribute === null) continue;
+                    if(attribute === null) continue;
                     targetElement.removeAttribute(attribute.name);
                 }
 
                 // Appends attributes
                 const attributes = (options[optionName] ?? {}) as Shortcuts["attributes"];
                 const attributeNames = Object.getOwnPropertyNames(attributes);
-                for (let j = 0; j < attributeNames.length; j++) {
+                for(let j = 0; j < attributeNames.length; j++) {
                     const attributeName = attributeNames[j] as string & keyof typeof attributes;
                     const attribute = attributes[attributeName];
                     targetElement.setAttribute(attributeName, attribute);
@@ -221,8 +245,8 @@ export function modify<TargetElement extends HTMLElement>(
 
                 // Appends classes
                 const classes = (options[optionName] ?? []) as Shortcuts["classes"];
-                if (Array.isArray(classes)) {
-                    for (let j = 0; j < classes.length; j++) {
+                if(Array.isArray(classes)) {
+                    for(let j = 0; j < classes.length; j++) {
                         const token = classes[j];
                         targetElement.classList.add(token);
                     }
@@ -244,11 +268,11 @@ export function modify<TargetElement extends HTMLElement>(
                 // Appends events
                 const events = (options[optionName] ?? {}) as Shortcuts["events"];
                 const eventNames = Object.getOwnPropertyNames(events);
-                for (let j = 0; j < eventNames.length; j++) {
+                for(let j = 0; j < eventNames.length; j++) {
                     const eventName = eventNames[j] as keyof typeof events;
                     const event = events[eventName] ?? (() => {});
-                    if (Array.isArray(event)) {
-                        for (let k = 0; k < event.length; k++) {
+                    if(Array.isArray(event)) {
+                        for(let k = 0; k < event.length; k++) {
                             const listener = event[k];
                             targetElement.addEventListener(eventName, listener);
                         }
