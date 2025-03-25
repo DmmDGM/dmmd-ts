@@ -24,16 +24,141 @@ export type ElementShortcuts<TargetElement extends HTMLElement> = {
         ElementListener<TargetElement, EventName>[] |
         ElementListener<TargetElement, EventName>
     }>;
-    href: string;
     html: string;
-    id: string;
     parent: HTMLElement | null;
-    src: string;
-    style: Partial<CSSStyleDeclaration>;
     text: string;
 };
 
 // Defines functions
+/** Appends properties to element. */
+export function append<TargetElement extends HTMLElement>(
+    targetElement: TargetElement,
+    options: Partial<ElementOptions<TargetElement>>
+): TargetElement {
+    // Modifies element
+    type Shortcuts = ElementShortcuts<TargetElement>;
+    const optionNames = Object.getOwnPropertyNames(options);
+    for (let i = 0; i < optionNames.length; i++) {
+        // Handles option
+        const optionName = optionNames[i] as keyof typeof options;
+        switch (optionName) {
+            // Handles attributes
+            case "attributes": {
+                // Appends attributes
+                const attributes = (options[optionName] ?? {}) as Shortcuts["attributes"];
+                const attributeNames = Object.getOwnPropertyNames(attributes);
+                for (let j = 0; j < attributeNames.length; j++) {
+                    const attributeName = attributeNames[j] as string & keyof typeof attributes;
+                    const attribute = attributes[attributeName];
+                    targetElement.setAttribute(attributeName, attribute);
+                }
+
+                // Breaks
+                break;
+            }
+
+            // Handles children
+            case "children": {
+                // Appends children
+                const children = (options[optionName] ?? []) as Shortcuts["children"];
+                if(Array.isArray(children)) {
+                    for(let j = 0; j < children.length; j++) {
+                        const child = children[j];
+                        targetElement.appendChild(child);
+                    }
+                }
+                else targetElement.appendChild(children);
+
+                // Breaks
+                break;
+            }
+
+            // Handles classes
+            case "classes": {
+                // Appends classes
+                const classes = (options[optionName] ?? []) as Shortcuts["classes"];
+                if (Array.isArray(classes)) {
+                    for (let j = 0; j < classes.length; j++) {
+                        const token = classes[j];
+                        targetElement.classList.add(token);
+                    }
+                }
+                else targetElement.classList.add(classes);
+
+                // Breaks
+                break;
+            }
+
+            // Handles events
+            case "events": {
+                // Appends events
+                const events = (options[optionName] ?? {}) as Shortcuts["events"];
+                const eventNames = Object.getOwnPropertyNames(events);
+                for (let j = 0; j < eventNames.length; j++) {
+                    const eventName = eventNames[j] as keyof typeof events;
+                    const event = events[eventName] ?? (() => {});
+                    if (Array.isArray(event)) {
+                        for (let k = 0; k < event.length; k++) {
+                            const listener = event[k];
+                            targetElement.addEventListener(eventName, listener);
+                        }
+                    }
+                    else targetElement.addEventListener(eventName, event);
+                }
+
+                // Breaks
+                break;
+            }
+
+            // Handles html
+            case "html": {
+                // Appends html
+                const html = (options[optionName] ?? "") as Shortcuts["html"];
+                targetElement.innerHTML += html;
+
+                // Breaks
+                break;
+            }
+
+            // Handles parent
+            case "parent": {
+                // Replaces parent
+                const parent = (options[optionName] ?? null) as Shortcuts["parent"];
+                if(parent === null && targetElement.parentElement !== null)
+                    targetElement.parentElement.removeChild(targetElement);
+                else if(parent !== null) parent.appendChild(targetElement);
+
+                // Breaks
+                break;
+            }
+
+            // Handles text
+            case "text": {
+                // Replaces text
+                const text = (options[optionName] ?? "") as Shortcuts["text"];
+                targetElement.innerText = text;
+
+                // Breaks
+                break;
+            }
+
+            // Handles properties
+            default: {
+                // Replaces properties
+                type Properties = ElementProperties<TargetElement>;
+                const property = options[optionName] as Properties[typeof optionName];
+                targetElement[optionName] = property;
+
+                // Breaks
+                break;
+            }
+        }
+    }
+
+    // Returns element
+    return targetElement;
+}
+
 /** Creates and initializes element. */
 export function create<TagName extends keyof HTMLElementTagNameMap>(
     tagName: TagName,
@@ -135,31 +260,11 @@ export function modify<TargetElement extends HTMLElement>(
                 break;
             }
 
-            // Handles href
-            case "href": {
-                // Replaces href
-                const href = (options[optionName] ?? "") as Shortcuts["href"];
-                if("href" in targetElement) targetElement.href = href;
-
-                // Breaks
-                break;
-            }
-
             // Handles html
             case "html": {
                 // Replaces html
                 const html = (options[optionName] ?? "") as Shortcuts["html"];
                 targetElement.innerHTML = html;
-
-                // Breaks
-                break;
-            }
-
-            // Handles id
-            case "id": {
-                // Replaces id
-                const id = (options[optionName] ?? "") as Shortcuts["id"];
-                targetElement.id = id;
 
                 // Breaks
                 break;
@@ -172,27 +277,6 @@ export function modify<TargetElement extends HTMLElement>(
                 if(parent === null && targetElement.parentElement !== null)
                     targetElement.parentElement.removeChild(targetElement);
                 else if(parent !== null) parent.appendChild(targetElement);
-
-                // Breaks
-                break;
-            }
-
-            // Handles src
-            case "src": {
-                // Replaces src
-                const src = (options[optionName] ?? "") as Shortcuts["src"];
-                if("src" in targetElement) targetElement.src = src;
-
-                // Breaks
-                break;
-            }
-
-            // Handles style
-            case "style": {
-                // Replaces style
-                targetElement.style = "";
-                const style = (options[optionName] ?? {}) as Shortcuts["style"];
-                Object.assign(targetElement.style, style);
 
                 // Breaks
                 break;
@@ -212,7 +296,7 @@ export function modify<TargetElement extends HTMLElement>(
             default: {
                 // Replaces properties
                 type Properties = ElementProperties<TargetElement>;
-                const property = (options[optionName] ?? void 0) as Properties[typeof optionName];
+                const property = options[optionName] as Properties[typeof optionName];
                 targetElement[optionName] = property;
 
                 // Breaks
