@@ -1,12 +1,15 @@
-// Defines types
-
+// Imports
 import type { Arrayable } from "../type/arrayable";
 
+// Defines types
 /** Element event listener. */
 export type ElementListener<
     TargetElement extends HTMLElement,
     EventName extends keyof HTMLElementEventMap
-> = ((this: TargetElement, event: HTMLElementEventMap[EventName]) => any) & EventListener;
+> = ((
+    this: TargetElement,
+    event: HTMLElementEventMap[EventName]
+) => any) & EventListener;
 
 /** Options for modifying element. */
 export type ElementOptions<TargetElement extends HTMLElement> =
