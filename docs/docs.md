@@ -1,4 +1,4 @@
-# DmmD.ts Documentation
+# [DmmD.ts](../README.md) / Documentation
 
 ## Table of Contents
 - [Bun](./bun.md)
@@ -10,4 +10,4 @@
 
 ---
 
-###### Last Updated March 26, 2025
+###### Last Updated: March 26, 2025
