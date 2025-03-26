@@ -6,12 +6,9 @@ import type { Arrayable } from "../type/arrayable";
 export type ElementListener<
     TargetElement extends HTMLElement,
     EventName extends keyof HTMLElementEventMap
-> = ((
-    this: TargetElement,
-    event: HTMLElementEventMap[EventName]
-) => any) & EventListener;
+> = ((this: TargetElement, event: HTMLElementEventMap[EventName]) => any) & EventListener;
 
-/** Options for modifying element. */
+/** Options for element modification. */
 export type ElementOptions<TargetElement extends HTMLElement> =
     ElementShortcuts<TargetElement> &
     Omit<ElementProperties<TargetElement>, keyof ElementShortcuts<TargetElement>>;
@@ -36,7 +33,7 @@ export type ElementShortcuts<TargetElement extends HTMLElement> = {
 };
 
 // Defines functions
-/** Creates and initializes element. */
+/** Creates and initializes an element. */
 export function create<TagName extends keyof HTMLElementTagNameMap>(
     tagName: TagName,
     options: Partial<ElementOptions<HTMLElementTagNameMap[TagName]>>
@@ -45,7 +42,12 @@ export function create<TagName extends keyof HTMLElementTagNameMap>(
     return modify(document.createElement(tagName), options);
 }
 
-/** Modifies element. */
+/** Modifies an element.
+ * 
+ *  Please note that this method only replaces or overwrites, not appends, properties on an element.
+ *  This means attempting to modify an element's classes, for example, will result in the complete removal of any other
+ *  previously defined classes on the element already.
+ *  **Please prefer manual handling if this behavior is not intended.** */
 export function modify<TargetElement extends HTMLElement>(
     targetElement: TargetElement,
     options: Partial<ElementOptions<TargetElement>>

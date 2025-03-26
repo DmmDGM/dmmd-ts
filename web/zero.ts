@@ -1,23 +1,15 @@
 // Defines private constants
-/** Alias for `document`. */
 const page = document;
-
-/** Alias for `Object.defineProperty`. */
 const put = Object.defineProperty;
-
-/** Alias for `"querySelector"`. */
 let querySelector = "querySelector";
 
 // Defines private functions
-/** Deep assigns object. */
 const assign = (target: any, data: Record<string, any>): void => {
     for(const key in data) {
         const value = data[key as keyof typeof data];
         typeof value === "object" ? assign(target[key], value) : target[key] = value;
     }
 }
-
-/** Wraps then iterates element with custom shortcuts. */
 const modify = (element: HTMLElement, properties: object): HTMLElement => {
     // Wraps element
     const define = (property: string, map: string) => !(0 in element) && put(element, property, {
