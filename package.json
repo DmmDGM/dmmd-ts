@@ -1,10 +1,16 @@
 {
-	"name": "dmmd-ts",
-	"devDependencies": {
-		"@types/bun": "latest"
-	},
-	"peerDependencies": {
-		"typescript": "^5.8.2"
-	},
-	"type": "module"
+    "devDependencies": {
+        "@types/bun": "latest"
+    },
+    "main": "index.mjs",
+    "name": "dmmd-ts",
+    "peerDependencies": {
+        "typescript": "^5.8.2"
+    },
+    "scripts": {
+        "build": "bun run buildcjs; bun run buildesm",
+        "buildcjs": "bun build ./index.ts --outfile ./index.cjs --production --format=cjs",
+        "buildesm": "bun build ./index.ts --outfile ./index.mjs --production --format=esm"
+    },
+    "type": "module"
 }
