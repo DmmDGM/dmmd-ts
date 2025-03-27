@@ -8,8 +8,8 @@ export function findCommonPrototype(left: unknown, right: unknown): object | nul
 	// Finds common prototype
 	const iterator = leftChain.values();
 	let prototype = iterator.next();
-	while (!prototype.done) {
-		if (rightChain.has(prototype.value)) return prototype.value;
+	while(!prototype.done) {
+		if(rightChain.has(prototype.value)) return prototype.value;
 		prototype = iterator.next();
 	}
 
@@ -20,15 +20,15 @@ export function findCommonPrototype(left: unknown, right: unknown): object | nul
 /** Parses and returns a set containing the entire prototype chain of a non-undefined value. */
 export function parsePrototypeChain(value: unknown): Set<object> {
 	// Handles undefined value
-	if (typeof value === "undefined") throw new Error("Prototype chain does not exists on undefined");
+	if(typeof value === "undefined") throw new Error("Prototype chain does not exists on undefined");
 
 	// Handles null value
 	const chain: Set<object> = new Set();
-	if (value === null) return chain;
+	if(value === null) return chain;
 
 	// Parses prototype chain
 	let prototype = Object.getPrototypeOf(value);
-	while (prototype !== null) {
+	while(prototype !== null) {
 		chain.add(prototype);
 		prototype = Object.getPrototypeOf(prototype);
 	}
@@ -39,7 +39,7 @@ export function parsePrototypeChain(value: unknown): Set<object> {
 
 /** Checks and returns whether a non-undefined value is an instance of a parent.
  *  
- *  Please prefer `typeof` and `instanceof` when strict prototype chain check is not required. */
+ *  **Please prefer `typeof` and `instanceof` when strict prototype chain check is not required.** */
 export function testParentPrototype(value: unknown, parent: object): boolean {
 	// Parses chain
 	const chain = parsePrototypeChain(value);

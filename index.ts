@@ -1,5 +1,4 @@
-// Imports
-import * as vanilla from "./vanilla";
-
 // Exports
-export { vanilla };
+export type * as type from "./type";
+export * as vanilla from "./vanilla";
+export * as web from "./web";
