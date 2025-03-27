@@ -1,8 +1,8 @@
 {
+    "name": "dmmd-ts",
     "devDependencies": {
         "@types/bun": "latest"
     },
-    "name": "dmmd-ts",
     "peerDependencies": {
         "typescript": "^5.8.2"
     },

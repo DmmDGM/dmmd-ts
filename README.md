@@ -1,21 +1,72 @@
 # DmmD.ts
 
 ## About
-
-A collection of functional and analytical utility tools that I enjoy using in my personal projects. Though the name
-suggests the project is designed for `TypeScript`, it contains many features beyond the `Node.js` environment.
-
-Documentation is not yet available, and I do not plan on adding one until I stop becoming lazy or until I actually
-add enough stuff to this repository to make a documentation page worth it; whichever comes first, I guess.
-
-But, eh. If you do plan on using this, I've documented and typed everything with TypeScript and JsDoc, so it should
-be relatively easy to use as long as you got that sweet intellisense on. Otherwise, feel free to just message me on
-Discord: `@therock2t`.
+This is a Bun.js library containing a collection of utility methods and properties that are commonly used in my own
+programming projects. Besides TypeScript, this library also contains various CSS, JSON, and text files.
 
 ## Installation
+Since this library will not be available on npm, you can install this package directly from Github using either of the
+two methods below:
 
-I haven't tested this yet.
+- Adding directly from Github repository:
+
+```sh
+bun add github:dmmdgm/dmmd-ts
+```
+
+- Linking from local clone:
+
+```sh
+git clone https://github.com/dmmdgm/dmmd-ts
+cd dmmd-ts
+bun link
+cd %your-project%
+bun link dmmd-ts
+```
 
 ## Usage
+There are three ways to import this library in your code:
 
-Same as above.
+- Importing the entire library:
+
+```ts
+import dmmd from "dmmd-ts";
+dmmd.vanilla.dummy.hello(); // "Hello!"
+```
+
+- Importing individual modules:
+
+```ts
+import vanilla from "dmmd-ts/vanilla";
+vanilla.dummy.hello();
+```
+
+- Importing individual namespaces (preferred):
+
+```ts
+import dummy from "dmmd-ts/vanilla/dummy";
+dummy.hello();
+```
+
+If your project is written in vanilla JavaScript, Common JavaScript and ESM JavaScript importing are an option as well;
+however, because this library is really only meant to be used in a TypeScript environment, only importing the entire
+library is supported. Feel free to build or compile this library yourself if this feature is absolutely necessary in
+your project:
+
+```js
+const dmmd = require("dmmd-ts"); // Common JavaScript
+
+import dmmd from "dmmd-ts"; // ESM JavaScript
+```
+
+## Links and Contacts
+- Discord (preferred): `@therock2t`
+- Email: `dm12332131mdgaming@gmail.com`
+- Github: https://github.com/dmmdgm/dmmd-ts
+
+## References and Credits
+- [Bun.js](https://bun.sh/)
+
+---
+
+###### Last Updated: 2025/03/26
