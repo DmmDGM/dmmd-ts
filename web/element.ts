@@ -6,7 +6,7 @@ import type { Arrayable } from "../type/arrayable";
 export type ElementListener<
     TargetElement extends HTMLElement,
     EventName extends keyof HTMLElementEventMap
-> = ((this: TargetElement, event: HTMLElementEventMap[EventName]) => any) & EventListener;
+> = ((this: TargetElement, event: HTMLElementEventMap[EventName]) => any);
 
 /** Options for element modification. */
 export type ElementOptions<TargetElement extends HTMLElement> =
@@ -130,10 +130,10 @@ export function modify<TargetElement extends HTMLElement>(
                     if(Array.isArray(event)) {
                         for(let k = 0; k < event.length; k++) {
                             const listener = event[k];
-                            targetElement.addEventListener(eventName, listener);
+                            targetElement.addEventListener(eventName, listener as EventListener);
                         }
                     }
-                    else targetElement.addEventListener(eventName, event);
+                    else targetElement.addEventListener(eventName, event as EventListener);
                 }
 
                 // Breaks
