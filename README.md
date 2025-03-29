@@ -31,21 +31,18 @@ There are three ways to import this library in your code:
 
 ```ts
 import dmmd from "dmmd-ts";
-dmmd.vanilla.debug.chirp(); // "Chirp!"
 ```
 
 - Importing individual modules:
 
 ```ts
 import vanilla from "dmmd-ts/vanilla";
-vanilla.debug.chirp(); // "Chirp!"
 ```
 
 - Importing individual namespaces (preferred):
 
 ```ts
-import debug from "dmmd-ts/vanilla/debug";
-debug.chirp(); // "Chirp!"
+import prototype from "dmmd-ts/vanilla/prototype";
 ```
 
 If your project is written in vanilla JavaScript, Common JavaScript and ESM JavaScript importing are an option as well;
@@ -69,4 +66,4 @@ import dmmd from "dmmd-ts"; // ESM JavaScript
 
 ---
 
-###### Last Updated: 2025/03/26
+###### Last Updated: 2025/03/29
