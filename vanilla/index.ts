@@ -1,6 +1,5 @@
 // Exports
 export * as color from "./color";
-export * as constant from "./constant";
 export * as fetch from "./fetch";
 export * as math from "./math";
 export * as object from "./object";
