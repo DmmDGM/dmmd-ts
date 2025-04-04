@@ -1,13 +1,13 @@
 // Imports
+import { resolve as resolvePath } from "node:path";
+import green from "chalk";
 import soda from "../json/soda.json";
-import * as time from "../vanilla/time";
-import chalk from "chalk";
-import nodePath from "node:path";
+import { beep } from "../vanilla/time";
 
 // Initializes make
-const boop = time.beep();
-const input = nodePath.resolve(import.meta.dir, "./soda.css");
-const output = nodePath.resolve(import.meta.dir, "../css/soda.css");
+const boop = beep();
+const input = resolvePath(import.meta.dir, "./soda.css");
+const output = resolvePath(import.meta.dir, "../css/soda.css");
 const source = await Bun.file(input).text();
 
 // Generates file
@@ -19,4 +19,4 @@ const target = source.replaceAll(/%(.*?)%/g, (match: string, tag: string) => {
 // Finalizes make
 await Bun.write(output, target);
 const delta = boop();
-console.log(chalk.green(`${input} => ${output} (${delta} ms)`));
+console.log(green(`${input} => ${output} (${delta} ms)`));
