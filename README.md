@@ -45,7 +45,7 @@ import vanilla from "dmmd-ts/vanilla";
 import prototype from "dmmd-ts/vanilla/prototype";
 ```
 
-> [NOTE]
+> [!NOTE]
 > Since this library is only meant to be used in Bun's TypeScript environment, if your project is written in vanilla
 > JavaScript or in a non-Bun environment (i.e. Node.js, Deno, or browser), you will unfortunately need build or compile
 > this library yourself.
