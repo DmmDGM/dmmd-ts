@@ -60,4 +60,4 @@ import prototype from "dmmd-ts/vanilla/prototype";
 
 ---
 
-###### Last Updated: 2025/03/29
+###### Last Updated: 2025/04/04
