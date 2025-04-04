@@ -45,16 +45,10 @@ import vanilla from "dmmd-ts/vanilla";
 import prototype from "dmmd-ts/vanilla/prototype";
 ```
 
-If your project is written in vanilla JavaScript, Common JavaScript and ESM JavaScript importing are an option as well;
-however, because this library is really only meant to be used in a TypeScript environment, only importing the entire
-library is supported. Feel free to build or compile this library yourself if this feature is absolutely necessary in
-your project:
-
-```js
-const dmmd = require("dmmd-ts"); // Common JavaScript
-
-import dmmd from "dmmd-ts"; // ESM JavaScript
-```
+> [NOTE]
+> Since this library is only meant to be used in Bun's TypeScript environment, if your project is written in vanilla
+> JavaScript or in a non-Bun environment (i.e. Node.js, Deno, or browser), you will unfortunately need build or compile
+> this library yourself.
 
 ## Links and Contacts
 - Discord (preferred): `@therock2t`
