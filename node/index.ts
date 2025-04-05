@@ -1,2 +1,2 @@
 // Exports
-export * as constant from "./constant";
+export * as constants from "./constants";
