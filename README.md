@@ -154,7 +154,7 @@ A collection of client-side / browser only code.
 | Name | Description |
 | - | - |
 | Element Inspector (`/element.ts`) | Handles creation and modification of elements with custom shortcuts.
-| Zero (`/zero.ts`) | Implementation of iiPythonx's [`zero.ts`](https://github.com/iiPythonx/radio/blob/main/radio/frontend/js/zero.js), with a clear goal of maximum file-size minimization. File import only. |
+| Zero (`/zero.ts`) | Implementation of iiPythonx's [`zero.js`](https://github.com/iiPythonx/radio/blob/main/radio/frontend/js/zero.js), with a clear goal of maximum file-size minimization. File import only. |
 | Zero (Compiled) (`/zero.js`) | Compiled file for `/zero.ts`, with the current file size being at `504 bytes`. Further minification using [Minify JS](https://minify-js.com/) can reduce it down to `496 bytes` if needed. File import only. |
 
 ### Script
