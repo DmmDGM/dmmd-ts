@@ -98,6 +98,7 @@ Internal builder for dynamic files within the library.
 | Name | Description |
 | - | - |
 | Soda.css (`/soda.ts`) | Generates `/css/soda.css` file. |
+| Zero (`/zero.ts`) | Generates `/web/zero.js` file. |
 
 > [!CAUTION]
 > For building and internal use only.
