@@ -1,7 +1,7 @@
 # DmmD.ts
 
 ## About
-This is a Bun.js library containing a collection of utility methods and properties that are commonly used in my own programming projects.
+This is a Bun library containing a collection of utility methods and properties that are commonly used in my own programming projects.
 Besides TypeScript, this library also contains various CSS, JSON, and text files.
 
 ## Installation
@@ -56,7 +56,7 @@ import { parsePrototypeChain } from "dmmd-ts/vanilla/prototype";
 > This library is only meant to be used in Bun's TypeScript environment.
 > If your project is written in vanilla JavaScript and/or in a non-Bun environment (i.e. Node.js, Deno, or browser),
 > and you wish to include this library in your project,
-> you will unfortunately need build and compile it yourself.
+> you will unfortunately need to build and compile it yourself.
 
 ## Namespaces and Files
 
