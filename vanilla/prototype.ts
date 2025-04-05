@@ -39,7 +39,7 @@ export function parsePrototypeChain(value: unknown): Set<object> {
 
 /** Checks and returns whether a non-undefined value is an instance of a parent.
  *  
- *  **Please prefer `typeof` and `instanceof` when strict prototype chain check is not required.** */
+ *  Please prefer `typeof` and `instanceof` when strict prototype chain check is not required. */
 export function testParentPrototype(value: unknown, parent: object): boolean {
 	// Parses chain
 	const chain = parsePrototypeChain(value);

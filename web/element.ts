@@ -45,9 +45,11 @@ export function create<TagName extends keyof HTMLElementTagNameMap>(
 /** Modifies an element.
  * 
  *  Please note that this method only replaces or overwrites, not appends, properties on an element.
+ *  
  *  This means attempting to modify an element's classes, for example, will result in the complete removal of any other
  *  previously defined classes on the element already.
- *  **Please prefer manual handling if this behavior is not intended.** */
+ *  
+ *  Please prefer manual handling if this behavior is not intended. */
 export function modify<TargetElement extends HTMLElement>(
     targetElement: TargetElement,
     options: Partial<ElementOptions<TargetElement>>
