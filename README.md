@@ -164,9 +164,6 @@ A collection of client-side / browser only code.
 - Email: `dm12332131mdgaming@gmail.com`
 - Github: https://github.com/dmmdgm/dmmd-ts
 
-## References and Credits
-- [Bun.js](https://bun.sh/)
-
 ---
 
-###### Last Updated: 2025/04/04
+###### Last Updated: 2025/04/05
