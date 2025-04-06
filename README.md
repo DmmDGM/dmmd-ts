@@ -35,21 +35,21 @@ This library supports three levels of importing, depending on your needs for you
 
 ```ts
 import dmmd from "dmmd-ts";
-import { vanilla } from "dmmd-ts";
+import { util } from "dmmd-ts";
 ```
 
 - Importing individual namespaces:
 
 ```ts
-import vanilla from "dmmd-ts/vanilla";
-import { prototype } from "dmmd-ts/vanilla";
+import util from "dmmd-ts/util";
+import { prototype } from "dmmd-ts/util";
 ```
 
 - Importing individual files:
 
 ```ts
-import prototype from "dmmd-ts/vanilla/prototype";
-import { parsePrototypeChain } from "dmmd-ts/vanilla/prototype";
+import prototype from "dmmd-ts/util/prototype";
+import { parsePrototypeChain } from "dmmd-ts/util/prototype";
 ```
 
 > [!NOTE]
@@ -137,7 +137,7 @@ A collection of type definitions.
 | - | - |
 | Arrayable (`/arrayable.d.ts`) | Converts types between its single and its array forms. |
 
-### Cross-Platform Code (`/vanilla`)
+### Cross-Platform Code (`/util`)
 
 A collection of utility code accessible and usable on both client-side and server-side.
 

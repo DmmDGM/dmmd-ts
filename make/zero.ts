@@ -2,7 +2,7 @@
 import { resolve as resolvePath, dirname as getDirectory } from "node:path";
 import green from "chalk";
 import soda from "../json/soda.json";
-import { beep } from "../vanilla/time";
+import { beep } from "../util/time";
 
 // Initializes make
 const boop = beep();

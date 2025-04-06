@@ -1,5 +1,5 @@
 // Imports
-import { attempt } from "../vanilla/pcall";
+import { attempt } from "../util/pcall";
 
 // Defines constants
 /** Project's git commit hash. */
