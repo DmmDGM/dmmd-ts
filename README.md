@@ -152,7 +152,7 @@ A collection of utility code accessible and usable on both client-side and serve
 | Time (`/time.ts`) | Collection of timing based functionalities. |
 
 > [!WARNING]
-> `/color.ts`, `/fetch.ts`, and `/queue.ts` has no complete features as of right now.
+> `/color.ts`, `/fetch.ts`, and `/queue.ts` have no complete features as of right now.
 
 ### Client-Side Code (`/web`)
 
