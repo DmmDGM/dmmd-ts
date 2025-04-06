@@ -60,15 +60,13 @@ import { parsePrototypeChain } from "dmmd-ts/util/prototype";
 
 ## Namespaces and Files
 
-<details>
-
-<summary>
-    <h3 style="display: inline">
-        Server-side Code (<code>/bun</code>)
-    </h3>
-</summary>
+### Server-side Code (`/bun`)
 
 A collection of server-side / Bun only code.
+
+<details>
+
+<summary>See Files</summary>
 
 | Name | Description |
 | - | - |
@@ -76,15 +74,13 @@ A collection of server-side / Bun only code.
 
 </details>
 
+### Stylesheets (`/css`)
+
+A collection of minimal styles for quick-start purposes.
+
 <details>
 
-<summary>
-    <h3 style="display: inline">
-        Stylesheets (<code>/css</code>)
-    </h3>
-</summary>
-
-A collection of minimal styles for quick start ups.
+<summary>See Files</summary>
 
 | Name | Description |
 | - | - |
