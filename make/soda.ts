@@ -1,6 +1,6 @@
 // Imports
 import { resolve as resolvePath } from "node:path";
-import green from "chalk";
+import chalk from "chalk";
 import soda from "../json/soda.json";
 import { beep } from "../util/time";
 
@@ -19,4 +19,4 @@ const target = source.replaceAll(/%(.*?)%/g, (match: string, tag: string) => {
 // Finalizes make
 await Bun.write(output, target);
 const delta = boop();
-console.log(green(`${input} => ${output} (${delta} ms)`));
+console.log(chalk.green(`${input} => ${output} (${delta} ms)`));

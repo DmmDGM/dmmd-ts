@@ -1,6 +1,6 @@
 // Imports
 import { resolve as resolvePath, dirname as getDirectory } from "node:path";
-import green from "chalk";
+import chalk from "chalk";
 import soda from "../json/soda.json";
 import { beep } from "../util/time";
 
@@ -18,4 +18,4 @@ await Bun.build({
 
 // Finalizes make
 const delta = boop();
-console.log(green(`${output} (${delta} ms)`));
+console.log(chalk.green(`${output} (${delta} ms)`));
