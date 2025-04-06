@@ -1,8 +1,8 @@
 # DmmD.ts
 
 ## About
-This is a Bun library containing a collection of utility methods and properties that are commonly used in my own programming projects.
-Besides TypeScript, this library also contains various CSS, JSON, and text files.
+This is a (mostly) Bun library containing a collection of utility methods and properties that are commonly used in my own programming projects.
+Besides TypeScript, this library also contains various CSS, JSON, and text files for lightweight quick-start purposes.
 
 ## Installation
 
@@ -150,6 +150,9 @@ A collection of utility code accessible and usable on both client-side and serve
 | Prototype Inspector (`/prototype.ts`) | Implements prototype-chain related computations. |
 | Queue (`/queue.ts`) | Implements a last-in-first-out list. |
 | Time (`/time.ts`) | Collection of timing based functionalities. |
+
+> [!WARNING]
+> `/color.ts`, `/fetch.ts`, and `/queue.ts` has no complete features as of right now.
 
 ### Client-Side Code (`/web`)
 
