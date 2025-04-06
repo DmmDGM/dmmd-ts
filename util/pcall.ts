@@ -1,6 +1,9 @@
 // Defines functions
 /** Runs callback and returns the result or a fallback value if an error occurs. */
-export function attempt<Value extends any>(callback: () => Value, fallback: Value): Value {
+export function attempt<Value extends any>(
+    callback: () => Value,
+    fallback: Value
+): Value {
     // Attempts callback
     try {
         return callback();
@@ -13,14 +16,16 @@ export function attempt<Value extends any>(callback: () => Value, fallback: Valu
 }
 
 /** Runs callback and returns the result and the error if one occurs. */
-export function inspect<Value extends any>(callback: () => Value): [ Value, null ] | [ null, unknown ] {
+export function inspect<Value extends any>(
+    callback: () => Value
+): [ Value, null, null ] | [ null, Error, unknown ] {
     // Attempts callback
     try {
-        return [ callback(), null ];
+        return [ callback(), null, null ];
     }
 
     // Returns error
     catch(error) {
-        return [ null, error ];
+        return [ null, error instanceof Error ? error : new Error(String(error)), error ];
     }
 }
