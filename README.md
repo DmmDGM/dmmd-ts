@@ -64,72 +64,42 @@ import { parsePrototypeChain } from "dmmd-ts/util/prototype";
 
 A collection of server-side / Bun only code.
 
-<details>
-
-<summary>See Files</summary>
-
 | Name | Description |
 | - | - |
 | Project Constants (`/project.ts`) | Collection of project constants. |
 
-</details>
-
 ### Stylesheets (`/css`)
 
 A collection of minimal styles for quick-start purposes.
-
-<details>
-
-<summary>See Files</summary>
 
 | Name | Description |
 | - | - |
 | Rebody (`/rebody.css`) | Forces full size without spacing on `html`, `body`, and `#app`. |
 | Soda.css (`/soda.css`) | Collection of color presets. |
 
-</details>
-
 ### Type Declarations (`/declare`)
 
 A collection of immediate global type declarations.
-
-<details>
-
-<summary>See Files</summary>
 
 | Name | Description |
 | - | - |
 | Styles (`/css.d.ts`) | Declaration of `.css` files. |
 
-</details>
-
 ### JSON Data (`/json`)
 
 A collection of JSON data and constants.
 
-<details>
-
-<summary>See Files</summary>
-
 | Name | Description |
 | - | - |
-
-</details>
 
 ### Internal Builder (`/make`)
 
 Internal builder for dynamic files within the library.
 
-<details>
-
-<summary>See Files</summary>
-
 | Name | Description |
 | - | - |
 | Soda.css (`/soda.ts`) | Generates `/css/soda.css` file. |
 | Zero (`/zero.ts`) | Generates `/web/zero.js` file. |
-
-</details>
 
 > [!CAUTION]
 > For building and internal use only.
@@ -138,15 +108,9 @@ Internal builder for dynamic files within the library.
 
 Raw internal files for dynamic files within the library.
 
-<details>
-
-<summary>See Files</summary>
-
 | Name | Description |
 | - | - |
 | Soda.css (`/soda.css`) | Template file for `soda.css`. |
-
-</details>
 
 > [!CAUTION]
 > For building and internal use only.
@@ -155,49 +119,27 @@ Raw internal files for dynamic files within the library.
 
 A collection of publicly exposed scripts.
 
-<details>
-
-<summary>See Files</summary>
-
 | Name | Description |
 | - | - |
-
-</details>
 
 ### Static Texts (`/text`)
 
 A collection of static text files.
 
-<details>
-
-<summary>See Files</summary>
-
 | Name | Description |
 | - | - |
-
-</details>
 
 ### Type Definitions (`/type`)
 
 A collection of type definitions.
 
-<details>
-
-<summary>See Files</summary>
-
 | Name | Description |
 | - | - |
 | Arrayable (`/arrayable.d.ts`) | Converts types between its single and its array forms. |
 
-</details>
-
 ### Cross-Platform Code (`/util`)
 
 A collection of utility code accessible and usable on both client-side and server-side.
-
-<details>
-
-<summary>See Files</summary>
 
 | Name | Description |
 | - | - |
@@ -209,8 +151,6 @@ A collection of utility code accessible and usable on both client-side and serve
 | Queue (`/queue.ts`) | Implements a last-in-first-out list. |
 | Time (`/time.ts`) | Collection of timing based functionalities. |
 
-</details>
-
 > [!WARNING]
 > `/color.ts`, `/fetch.ts`, and `/queue.ts` have no complete features as of right now.
 
@@ -218,17 +158,11 @@ A collection of utility code accessible and usable on both client-side and serve
 
 A collection of client-side / browser only code.
 
-<details>
-
-<summary>See Files</summary>
-
 | Name | Description |
 | - | - |
 | Element Inspector (`/element.ts`) | Handles creation and modification of elements with custom shortcuts.
 | Zero (`/zero.ts`) | Implementation of iiPythonx's [`zero.js`](https://github.com/iiPythonx/radio/blob/main/radio/frontend/js/zero.js), with a clear goal of maximum file-size minimization. File import only. |
 | Zero (Compiled) (`/zero.js`) | Compiled file for `/zero.ts`, with the current file size being at `504 bytes`. Further minification using [Minify JS](https://minify-js.com/) can reduce it down to `496 bytes` if needed. File import only. |
-
-</details>
 
 ### Script
 
