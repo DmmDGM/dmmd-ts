@@ -60,7 +60,13 @@ import { parsePrototypeChain } from "dmmd-ts/util/prototype";
 
 ## Namespaces and Files
 
-### Server-side Code (`/bun`)
+<details>
+
+<summary>
+    <h3 style="display: inline">
+        Server-side Code (<code>/bun</code>)
+    </h3>
+</summary>
 
 A collection of server-side / Bun only code.
 
@@ -68,7 +74,17 @@ A collection of server-side / Bun only code.
 | - | - |
 | Project Constants (`/project.ts`) | Collection of project constants. |
 
-### Styles (`/css`)
+</details>
+
+---
+
+<details>
+
+<summary>
+    <h3 style="display: inline">
+        Stylesheets (<code>/css</code>)
+    </h3>
+</summary>
 
 A collection of minimal styles for quick start ups.
 
@@ -76,6 +92,10 @@ A collection of minimal styles for quick start ups.
 | - | - |
 | Rebody (`/rebody.css`) | Forces full size without spacing on `html`, `body`, and `#app`. |
 | Soda.css (`/soda.css`) | Collection of color presets. |
+
+</details>
+
+---
 
 ### Type Declarations (`/declare`)
 
