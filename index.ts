@@ -1,5 +1,5 @@
 // Exports
 export type * as type from "./type";
-export * as node from "./node";
+export * as bun from "./bun";
 export * as vanilla from "./vanilla";
 export * as web from "./web";

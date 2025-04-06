@@ -60,12 +60,13 @@ import { parsePrototypeChain } from "dmmd-ts/vanilla/prototype";
 
 ## Namespaces and Files
 
-### Bun-Specific Code (`/bun`)
+### Server-side Code (`/bun`)
 
-A collection of Bun specific code.
+A collection of server-side / Bun only code.
 
 | Name | Description |
 | - | - |
+| Project Constants (`/project.ts`) | Collection of project constants. |
 
 ### Styles (`/css`)
 
@@ -103,13 +104,16 @@ Internal builder for dynamic files within the library.
 > [!CAUTION]
 > For building and internal use only.
 
-### Server-Side Code (`/node`)
+### Raw Internal Files (`/raw`)
 
-A collection of server-side only code.
+Raw internal files for dynamic files within the library.
 
 | Name | Description |
 | - | - |
-| Constants (`/constants.ts`) | Collection of constants. |
+| Soda.css (`/soda.css`) | Template file for `soda.css`. |
+
+> [!CAUTION]
+> For building and internal use only.
 
 ### Executable Scripts (`/script`)
 
@@ -166,4 +170,4 @@ A collection of client-side / browser only code.
 
 ---
 
-###### Last Updated: 2025/04/05
+###### Last Updated: 2025/04/06

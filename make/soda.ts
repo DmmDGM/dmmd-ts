@@ -6,7 +6,7 @@ import { beep } from "../vanilla/time";
 
 // Initializes make
 const boop = beep();
-const input = resolvePath(import.meta.dir, "./soda.css");
+const input = resolvePath(import.meta.dir, "../raw/soda.css");
 const output = resolvePath(import.meta.dir, "../css/soda.css");
 const source = await Bun.file(input).text();
 
