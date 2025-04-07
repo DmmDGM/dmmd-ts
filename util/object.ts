@@ -28,7 +28,7 @@ export function deepMerge<Target extends object>(
         for(let i = 0; i < keys.length; i++) {
             const key = keys[i] as keyof typeof sourceObject;
             const value = sourceObject[key];
-            if(typeof targetObject[key] === "object" && typeof value === "object") pairs.push([
+            if(typeof targetObject[key] === "object" && typeof value === "object" && value !== null) pairs.push([
                 targetObject[key], value
             ]);
             else targetObject[key] = value;

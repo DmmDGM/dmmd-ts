@@ -1,15 +1,11 @@
 {
     "name": "dmmd-ts",
     "devDependencies": {
-        "@types/bun": "latest"
+        "@types/bun": "latest",
+        "chalk": "^5.4.1"
     },
     "peerDependencies": {
         "typescript": "^5.8.2"
-    },
-    "scripts": {
-        "build": "bun run buildcjs; bun run buildesm",
-        "buildcjs": "bun build ./index.ts --outfile ./index.cjs --minify --format=cjs",
-        "buildesm": "bun build ./index.ts --outfile ./index.mjs --minify --format=esm"
     },
     "type": "module"
 }
