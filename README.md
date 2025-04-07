@@ -2,7 +2,14 @@
 
 ## About
 This is a (mostly) Bun library containing a collection of utility methods and properties that are commonly used in my own programming projects.
-Besides TypeScript, this library also contains various CSS, JSON, and text files for lightweight quick-start purposes.
+
+The goal is this project is to be as minimal in its dependencies as possible. 
+As of right now, [Chalk](https://github.com/chalk/chalk) is only true dependency in the project; even then, it is used for internal building primarily.
+There are no plans to include any other dependencies as of right now, but I can't promise I won't add any more in the future either.
+
+Also, despite its name, this library also contains various CSS, JSON, and text files for lightweight quick-start purposes.
+
+Personally I don't expect anyone else to use this library other than me. However, if you do decide to include it in your project and find any critical bugs, please alert me either via Github Issues or Discord.
 
 ## Installation
 
@@ -166,4 +173,4 @@ A collection of client-side / browser only code.
 
 ---
 
-###### Last Updated: 2025/04/06
+###### Last Updated: 2025/04/07
