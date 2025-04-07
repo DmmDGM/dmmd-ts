@@ -29,14 +29,7 @@ bun link dmmd-ts
 
 ### Importing
 
-This library supports three levels of importing, depending on your needs for your project.
-
-- Importing the entire library:
-
-```ts
-import dmmd from "dmmd-ts";
-import { util } from "dmmd-ts";
-```
+This library supports two levels of importing, depending on your needs for your project.
 
 - Importing individual namespaces:
 
