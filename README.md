@@ -77,14 +77,6 @@ A collection of minimal styles for quick-start purposes.
 | Rebody (`/rebody.css`) | Forces full size without spacing on `html`, `body`, and `#app`. |
 | Soda.css (`/soda.css`) | Collection of color presets. |
 
-### Type Declarations (`/declare`)
-
-A collection of immediate global type declarations.
-
-| Name | Description |
-| - | - |
-| Styles (`/css.d.ts`) | Declaration of `.css` files. |
-
 ### JSON Data (`/json`)
 
 A collection of JSON data and constants.
