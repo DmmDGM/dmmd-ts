@@ -1,7 +1,6 @@
 // Imports
 import { resolve as resolvePath, dirname as getDirectory } from "node:path";
 import chalk from "chalk";
-import soda from "../json/soda.json";
 import { beep } from "../util/time";
 
 // Initializes make
