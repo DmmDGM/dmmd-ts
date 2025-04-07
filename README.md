@@ -107,7 +107,7 @@ Raw internal files for dynamic files within the library.
 > [!CAUTION]
 > For building and internal use only.
 
-### Executable Scripts (`/script`)
+### Executable Scripts (`/run`)
 
 A collection of publicly exposed scripts.
 
