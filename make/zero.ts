@@ -17,4 +17,4 @@ await Bun.build({
 
 // Finalizes make
 const delta = boop();
-console.log(chalk.green(`${output} (${delta} ms)`));
+console.log(chalk.green(`Make: ${output} (${delta} ms)`));

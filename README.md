@@ -135,16 +135,11 @@ A collection of utility code accessible and usable on both client-side and serve
 
 | Name | Description |
 | - | - |
-| Color Converter (`/color.ts`) | Converts values between various color formats. |
-| Fetcher (`/fetch.ts`) | Handles tailored fetch requests. |
 | Math Extended (`/math.ts`) | Implements more advanced math features. |
 | Object Inspector (`/object.ts`) | Implements more advanced object-related computations. |
+| Protected Call (`/pcall.ts`) | Implements function calls that handles error automatically. |
 | Prototype Inspector (`/prototype.ts`) | Implements prototype-chain related computations. |
-| Queue (`/queue.ts`) | Implements a last-in-first-out list. |
 | Time (`/time.ts`) | Collection of timing based functionalities. |
-
-> [!WARNING]
-> `/color.ts`, `/fetch.ts`, and `/queue.ts` have no complete features as of right now.
 
 ### Client-Side Code (`/web`)
 
