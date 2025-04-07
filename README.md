@@ -21,7 +21,7 @@ you can install this package directly from Github using either of the two method
 - Adding directly from Github repository:
 
 ```sh
-bun add github:dmmdgm/dmmd-ts#main
+bun add github:dmmdgm/dmmd-ts
 ```
 
 - Linking from local clone:
