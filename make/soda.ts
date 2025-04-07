@@ -19,4 +19,4 @@ const target = source.replaceAll(/%(.*?)%/g, (match: string, tag: string) => {
 // Finalizes make
 await Bun.write(output, target);
 const delta = boop();
-console.log(chalk.green(`${input} => ${output} (${delta} ms)`));
+console.log(chalk.green(`Make: ${input} => ${output} (${delta} ms)`));
