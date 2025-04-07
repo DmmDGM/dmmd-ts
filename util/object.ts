@@ -1,9 +1,9 @@
 // Defines functions
 /** Merges sources and its nested children to target. */
-export function deepAssign<Target extends object>(
-    target: Target,
+export function deepAssign<TargetObject extends object>(
+    target: TargetObject,
     ...sources: object[]
-): Target {
+): TargetObject {
     // Merges objects
     for(let i = 0; i < sources.length; i++) deepMerge(target, sources[i]);
 
@@ -12,10 +12,10 @@ export function deepAssign<Target extends object>(
 }
 
 /** Merges source and its nested children to target. */
-export function deepMerge<Target extends object>(
-    target: Target,
+export function deepMerge<TargetObject extends object>(
+    target: TargetObject,
     source: object
-): Target {
+): TargetObject {
     // Initializes pair
     const pairs: [ object, object ][] = [
         [ target, source ]
