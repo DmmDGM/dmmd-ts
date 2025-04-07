@@ -11,3 +11,4 @@ declare module "dmmd-ts/util" {
 declare module "dmmd-ts/web" {
     export * as web from "./web";
 };
+declare module "dmmd-ts/web/*" {};
