@@ -10,6 +10,45 @@ export function beep(): () => number {
     return boop;
 }
 
+export function createInterval(
+    callback: (this: NodeJS.Timeout) => any,
+    time: number,
+    immediate: boolean = false
+): {
+    refresh: (immediate?: boolean) => void,
+    start: (immediate?: boolean) => void,
+    stop: () => void
+} {
+    // Creates interval
+    let interval = setInterval(callback, time);
+    let stop = () => clearInterval(interval);
+    let start = (startImmediate: boolean = false) => {
+        if(interval.hasRef()) interval = setInterval(callback, time);
+        if(startImmediate) callback.call(interval);
+    };
+    let refresh = (refreshImmediate: boolean = false) => {
+        interval.hasRef() ? interval.refresh() : start(refreshImmediate);
+    };
+    return { refresh, start, stop };
+}
+
+/** Creates a loop that executes a callback in specified intervals and returns a callback that stops the loop. */
+export function loop(
+    callback: (this: NodeJS.Timeout) => any,
+    time: number,
+    immediate: boolean = false
+): () => void {
+    // Creates interval
+    const interval = setInterval(callback, time);
+    const stop = () => clearInterval(interval);
+
+    // Calls immediate
+    if(immediate) callback.call(interval);
+
+    // Returns stop
+    return stop;
+}
+
 /** Creates and returns a callback, which prints and returns the delta time elapsed since the initialization function
  *  is called.
  * 
@@ -36,3 +75,4 @@ export function sleep(time: number): Promise<void> {
         setTimeout(resolve, time);
     });
 }
+
