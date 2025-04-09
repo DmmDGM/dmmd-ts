@@ -10,10 +10,12 @@ export function beep(): () => number {
     return boop;
 }
 
+/** Creates an interval that executes a callback in specified interval and returns callbacks that controls the
+ *  interval. */
 export function createInterval(
     callback: (this: NodeJS.Timeout) => any,
     time: number,
-    immediate: boolean = false
+    createImmediate: boolean = false
 ): {
     refresh: (immediate?: boolean) => void,
     start: (immediate?: boolean) => void,
@@ -21,49 +23,52 @@ export function createInterval(
 } {
     // Creates interval
     let interval = setInterval(callback, time);
-    let stop = () => clearInterval(interval);
-    let start = (startImmediate: boolean = false) => {
-        if(interval.hasRef()) interval = setInterval(callback, time);
+
+    // Defines callbacks
+    const start = (startImmediate: boolean = false) => {
+        if(interval.hasRef()) return;
+        interval = setInterval(callback, time);
         if(startImmediate) callback.call(interval);
     };
-    let refresh = (refreshImmediate: boolean = false) => {
-        interval.hasRef() ? interval.refresh() : start(refreshImmediate);
+    const stop = () => clearInterval(interval);
+    const refresh = (refreshImmediate: boolean = false) => {
+        if(!interval.hasRef()) {
+            start(refreshImmediate);
+            return;
+        }
+        interval.refresh();
+        if(refreshImmediate) callback.call(interval);
     };
+
+    // Calls immediate
+    if(createImmediate) callback.call(interval);
+
+    // Returns callback
     return { refresh, start, stop };
 }
 
-/** Creates a loop that executes a callback in specified intervals and returns a callback that stops the loop. */
-export function loop(
+/** Creates a timeout that executes after a specific time and returns callbacks that controls the timeout. */
+export function createTimeout(
     callback: (this: NodeJS.Timeout) => any,
-    time: number,
-    immediate: boolean = false
-): () => void {
-    // Creates interval
-    const interval = setInterval(callback, time);
-    const stop = () => clearInterval(interval);
+    time: number
+): {
+    refresh: () => void,
+    start: () => void,
+    stop: () => void
+} {
+    // Creates timeout
+    let timeout = setTimeout(callback, time);
 
-    // Calls immediate
-    if(immediate) callback.call(interval);
-
-    // Returns stop
-    return stop;
-}
-
-/** Creates and returns a callback, which prints and returns the delta time elapsed since the initialization function
- *  is called.
- * 
- *  Essentially a replication of `console.time` and `console.timeEnd`. */
-export function ping(name: string = "default"): () => number {
-    // Creates callbacks
-    const boop = beep();
-    const pong = () => {
-        const delta = boop();
-        console.log(name + ": " + String(delta) + " ms");
-        return delta;
-    }
+    // Defines callbacks
+    const start = () => {
+        if(timeout.hasRef()) return;
+        timeout = setTimeout(callback, time);
+    };
+    const stop = () => clearTimeout(timeout);
+    const refresh = () => timeout.hasRef() ? timeout.refresh() : start();
 
     // Returns callback
-    return pong;
+    return { refresh, start, stop };
 }
 
 /** Creates and returns a promise that resolves after a set amount of milliseconds.
