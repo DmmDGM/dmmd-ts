@@ -1,3 +1,13 @@
+// Defines classes
+export class Loop {
+    private _callback: () => any;
+    private _time: number;
+    private _interval: NodeJS.Timeout;
+    private _paused: boolean;
+
+    constructor
+}
+
 // Defines functions
 /** Creates and returns a callback, which returns the delta time elapsed time since the initialization function is
  *  called. */
@@ -10,14 +20,13 @@ export function beep(): () => number {
     return boop;
 }
 
-/** Creates an interval that executes a callback in specified interval and returns callbacks that controls the
- *  interval. */
-export function createInterval(
-    callback: (this: NodeJS.Timeout) => any,
+/** Creates a loop that executes a callback in specified interval and returns callbacks that controls the loop. */
+export function loop(
+    callback: () => any,
     time: number,
     createImmediate: boolean = false
 ): {
-    refresh: (immediate?: boolean) => void,
+    restart: (immediate?: boolean) => void,
     start: (immediate?: boolean) => void,
     stop: () => void
 } {
@@ -27,48 +36,21 @@ export function createInterval(
     // Defines callbacks
     const start = (startImmediate: boolean = false) => {
         if(interval.hasRef()) return;
-        interval = setInterval(callback, time);
-        if(startImmediate) callback.call(interval);
+        interval = setInterval(() => callback(), time);
+        if(startImmediate) callback();
     };
     const stop = () => clearInterval(interval);
-    const refresh = (refreshImmediate: boolean = false) => {
-        if(!interval.hasRef()) {
-            start(refreshImmediate);
-            return;
-        }
+    const restart = (refreshImmediate: boolean = false) => {
+        if(!interval.hasRef()) return start(refreshImmediate);
         interval.refresh();
-        if(refreshImmediate) callback.call(interval);
+        if(refreshImmediate) callback();
     };
 
     // Calls immediate
-    if(createImmediate) callback.call(interval);
+    if(createImmediate) callback();
 
     // Returns callback
-    return { refresh, start, stop };
-}
-
-/** Creates a timeout that executes after a specific time and returns callbacks that controls the timeout. */
-export function createTimeout(
-    callback: (this: NodeJS.Timeout) => any,
-    time: number
-): {
-    refresh: () => void,
-    start: () => void,
-    stop: () => void
-} {
-    // Creates timeout
-    let timeout = setTimeout(callback, time);
-
-    // Defines callbacks
-    const start = () => {
-        if(timeout.hasRef()) return;
-        timeout = setTimeout(callback, time);
-    };
-    const stop = () => clearTimeout(timeout);
-    const refresh = () => timeout.hasRef() ? timeout.refresh() : start();
-
-    // Returns callback
-    return { refresh, start, stop };
+    return { restart, start, stop };
 }
 
 /** Creates and returns a promise that resolves after a set amount of milliseconds.
@@ -80,4 +62,3 @@ export function sleep(time: number): Promise<void> {
         setTimeout(resolve, time);
     });
 }
-
