@@ -36,27 +36,18 @@ bun link dmmd-ts
 
 ### Importing
 
-This library supports two levels of importing, depending on your needs for your project.
-
-- Importing individual namespaces:
-
-```ts
-import util from "dmmd-ts/util";
-import { prototype } from "dmmd-ts/util";
-```
-
-- Importing individual files:
+This library only supports file importing, as demonstrated in the following code snippet:
 
 ```ts
 import prototype from "dmmd-ts/util/prototype";
+prototype.parsePrototypeChain(/** ... */);
+
 import { parsePrototypeChain } from "dmmd-ts/util/prototype";
+parsePrototypeChain(/** ... */);
 ```
 
-> [!NOTE]
-> This library is only meant to be used in Bun's TypeScript environment.
-> If your project is written in vanilla JavaScript and/or in a non-Bun environment (i.e. Node.js, Deno, or browser),
-> and you wish to include this library in your project,
-> you will unfortunately need to build and compile it yourself.
+Please note that this library is only meant to be used in Bun's TypeScript environment.
+If your project is written in vanilla JavaScript and/or in a non-Bun environment (i.e. Node.js, Deno, or browser), and you wish to include this library in your project, you will unfortunately need to build and compile it yourself.
 
 ## Namespaces and Files
 
@@ -161,4 +152,4 @@ A collection of client-side / browser only code.
 
 ---
 
-###### Last Updated: 2025/04/07
+###### Last Updated: 2025/04/09
