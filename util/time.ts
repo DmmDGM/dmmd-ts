@@ -1,13 +1,3 @@
-// Defines classes
-export class Loop {
-    private _callback: () => any;
-    private _time: number;
-    private _interval: NodeJS.Timeout;
-    private _paused: boolean;
-
-    constructor
-}
-
 // Defines functions
 /** Creates and returns a callback, which returns the delta time elapsed time since the initialization function is
  *  called. */
