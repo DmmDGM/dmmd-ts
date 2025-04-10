@@ -21,8 +21,9 @@ export const emitter = new Emitter<{
 export function bind() {
     process.stdin.setRawMode(true);
     process.stdin.on("data", (data) => {
-        console.log(data.toString());
+        console.log([ data, data.toString() ]);
         emitter.emit("key", data.toString());
+        if(data.toString() === "C") process.exit();
     });
 }
 
