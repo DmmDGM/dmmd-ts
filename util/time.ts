@@ -1,4 +1,12 @@
-// Defines functions
+// Defines types
+export type Loop = {
+    now: () => Loop;
+    reset: () => Loop;
+    start: () => Loop;
+    stop: () => Loop;
+};
+
+// Defines methods
 /** Creates and returns a callback, which returns the delta time elapsed time since the initialization function is
  *  called. */
 export function beep(): () => number {
@@ -10,37 +18,42 @@ export function beep(): () => number {
     return boop;
 }
 
-/** Creates a loop that executes a callback in specified interval and returns callbacks that controls the loop. */
-export function loop(
-    callback: () => any,
-    time: number,
-    createImmediate: boolean = false
-): {
-    restart: (immediate?: boolean) => void,
-    start: (immediate?: boolean) => void,
-    stop: () => void
-} {
-    // Creates interval
-    let interval = setInterval(callback, time);
+/** Creates a loop that executes a callback in specified interval and returns controls for the loop. */
+export function loop(callback: () => any, interval: number): Loop {
+    // Creates timeout
+    const tick = (expected: number = performance.now() + interval) => setTimeout(() => {
+        // Triggers callback
+        callback();
 
-    // Defines callbacks
-    const start = (startImmediate: boolean = false) => {
-        if(interval.hasRef()) return;
-        interval = setInterval(() => callback(), time);
-        if(startImmediate) callback();
+        // Ticks timeout
+        timeout = tick(expected + interval);
+    }, expected - performance.now());
+    let timeout: NodeJS.Timeout = tick();
+
+    // Creates controls
+    const controls = {
+        now: () => {
+            controls.reset();
+            callback();
+            return controls;
+        },
+        reset: () => {
+            if(timeout.hasRef()) timeout.refresh();
+            else timeout = tick();
+            return controls;
+        },
+        start: () => {
+            if(!timeout.hasRef()) timeout = tick();
+            return controls;
+        },
+        stop: () => {
+            clearTimeout(timeout);
+            return controls;
+        }
     };
-    const stop = () => clearInterval(interval);
-    const restart = (refreshImmediate: boolean = false) => {
-        if(!interval.hasRef()) return start(refreshImmediate);
-        interval.refresh();
-        if(refreshImmediate) callback();
-    };
 
-    // Calls immediate
-    if(createImmediate) callback();
-
-    // Returns callback
-    return { restart, start, stop };
+    // Returns callbacks
+    return controls;
 }
 
 /** Creates and returns a promise that resolves after a set amount of milliseconds.

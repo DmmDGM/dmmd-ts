@@ -1,4 +1,4 @@
-// Defines functions
+// Defines methods
 /** Merges sources and its nested children to target. */
 export function deepAssign(target: object, ...sources: object[]): object {
     // Merges objects
@@ -6,10 +6,6 @@ export function deepAssign(target: object, ...sources: object[]): object {
 
     // Returns target
     return target;
-}
-
-export function deepEquals(): boolean {
-    return false;
 }
 
 /** Merges source and its nested children to target. */

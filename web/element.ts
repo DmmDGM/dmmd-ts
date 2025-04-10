@@ -32,7 +32,7 @@ export type ElementShortcuts<TargetElement extends HTMLElement> = {
     text: string;
 };
 
-// Defines functions
+// Defines methods
 /** Creates and initializes an element. */
 export function create<TagName extends keyof HTMLElementTagNameMap>(
     tagName: TagName,

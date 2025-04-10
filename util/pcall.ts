@@ -1,4 +1,4 @@
-// Defines functions
+// Defines methods
 /** Runs an asynchronous callback and returns the result or a fallback value if an error occurs. */
 export async function attemptAsync<Value extends any>(
     callback: () => Promise<Value>,

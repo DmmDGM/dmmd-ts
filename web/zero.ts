@@ -1,9 +1,7 @@
-// Defines private constants
+// Initializes zero
 const page = document;
 const put = Object.defineProperty;
 let querySelector = "querySelector";
-
-// Defines private functions
 const assign = (target: any, data: Record<string, any>): void => {
     for(const key in data) {
         const value = data[key as keyof typeof data];
@@ -29,7 +27,7 @@ const modify = (element: HTMLElement, properties: object): HTMLElement => {
     return element;
 }
 
-// Defines functions
+// Defines methods
 /** Query selects and assigns properties to element. */
 export const z = (query: string, properties: object): HTMLElement =>
     // @ts-ignore
@@ -40,14 +38,14 @@ export const zs = (query: string, properties: object): HTMLElement[] => {
     // Iterates elements
     // @ts-ignore
     const elements = [ ...page[querySelector + "All"](query) ]
-        .map(element => modify(element as HTMLElement, properties)) as HTMLElement[];
+        .map((element) => modify(element as HTMLElement, properties)) as HTMLElement[];
 
     // Defines shortcuts
     const define = (property: string) => put(elements, property, {
         // @ts-ignore
         get: () => elements.map(element => element[property]),
         // @ts-ignore
-        set: (value: any) => elements.map(element => element[property] = value)
+        set: (value: any) => elements.map((element) => element[property] = value)
     });
     define("text");
     define("html");

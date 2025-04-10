@@ -1,7 +1,7 @@
 // Imports
-import { attempt } from "../util/pcall";
+import { attemptSync as attempt } from "../util/pcall";
 
-// Defines constants
+// Defines properties
 /** Project's git commit hash. */
 export const commitHash = attempt(() => Bun.spawnSync([
     "git", "rev-parse", "--short", "HEAD"

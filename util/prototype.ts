@@ -1,4 +1,4 @@
-// Defines functions
+// Defines methods
 /** Finds and returns the closest common prototype of two non-undefined values. */
 export function findCommonPrototype(left: unknown, right: unknown): object | null {
 	// Parses prototype chain
