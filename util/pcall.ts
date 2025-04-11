@@ -1,7 +1,7 @@
 // Defines methods
 /** Runs an asynchronous callback and returns the result or a fallback value if an error occurs. */
-export async function attemptAsync<Value extends any>(
-    callback: () => Promise<Value>,
+export async function ensureAsync<Value extends any>(
+    callback: () => (Promise<Value> | Value),
     fallback: Promise<Value> | Value
 ): Promise<Value> {
     // Attempts callback
@@ -16,7 +16,7 @@ export async function attemptAsync<Value extends any>(
 }
 
 /** Runs a synchronous callback and returns the result or a fallback value if an error occurs. */
-export function attemptSync<Value extends any>(
+export function ensureSync<Value extends any>(
     callback: () => Value,
     fallback: Value
 ): Value {
@@ -33,7 +33,7 @@ export function attemptSync<Value extends any>(
 
 /** Runs an asynchronous callback and returns the result and the error if one occurs. */
 export async function runAsync<Value extends any>(
-    callback: () => Promise<Value>
+    callback: () => (Promise<Value> | Value)
 ): Promise<[ Value, null, null ] | [ null, Error, unknown ]> {
     // Attempts callback
     try {

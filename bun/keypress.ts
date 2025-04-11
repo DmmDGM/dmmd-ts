@@ -1,32 +1,53 @@
 // Imports
+import nodeReadline from "node:readline";
 import { Emitter } from "../util/emitter";
 
-// Defines types
-export type Key = {
-    control: boolean;
-    shift: boolean;
+// Initializes keypress
+const detector = (string: string | undefined, data: {
+    ctrl: boolean;
     meta: boolean;
-    alt: boolean;
-    key: string;
+    name: string | undefined;
+    sequence: string;
+    shift: boolean;
+}) => emitter.emit("key", {
+    code: data.name ?? "",
+    control: data.ctrl,
+    meta: data.meta,
+    raw: string ?? "",
+    shift: data.shift,
+    unicode: data.sequence
+});
+const emitter = new Emitter<{ "key": (key: Key) => void }>();
+
+// Defines types
+/** Key data. */
+export type Key = {
+    code: string;
+    control: boolean;
+    meta: boolean;
+    raw: string;
+    shift: boolean;
+    unicode: string;
 };
 
 // Defines properties
-export const emitter = new Emitter<{
-    "bind": () => void;
-    "unbind": () => void;
-    "key": (key: string) => void;
-}>();
+/** Appends a keypress event listener. */
+export const listen = emitter.on.bind(emitter, "key");
+/** Mimics a keypress internally. */
+export const press = emitter.emit.bind(emitter, "key");
+/** Removes a keypress event listener. */
+export const unlisten = emitter.off.bind(emitter, "key");
 
 // Defines methods
-export function bind() {
+/** Starts detecting keypress events. */
+export function start(): void {
     process.stdin.setRawMode(true);
-    process.stdin.on("data", (data) => {
-        console.log([ data, data.toString() ]);
-        emitter.emit("key", data.toString());
-        if(data.toString() === "C") process.exit();
-    });
+    nodeReadline.emitKeypressEvents(process.stdin);
+    process.stdin.on("keypress", detector);
 }
 
-export function unbind(): void {
+/** Stops detecting keypress events. Does not remove existing listeners. */
+export function stop(): void {
     process.stdin.setRawMode(false);
+    process.stdin.off("keypress", detector);
 }

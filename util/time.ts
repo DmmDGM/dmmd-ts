@@ -1,4 +1,5 @@
 // Defines types
+/** Loop controls. */
 export type Loop = {
     now: () => Loop;
     reset: () => Loop;
