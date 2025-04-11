@@ -57,6 +57,7 @@ A collection of server-side / Bun only code.
 
 | Name | Description |
 | - | - |
+| Keypress (`/keypress.ts`) | Implements a keypress handler. |
 | Project Constants (`/project.ts`) | Collection of project constants. |
 
 ### Stylesheets (`/css`)
@@ -81,7 +82,7 @@ Internal builder for dynamic files within the library.
 
 | Name | Description |
 | - | - |
-| Make All (`/index.ts`) | Generates all files. Use `bun make` to run file. |
+| Make All (`/index.ts`) | Generates all files. Use `bun run make` to run file. |
 | Soda.css (`/soda.ts`) | Generates `/css/soda.css` file. |
 | Zero (`/zero.ts`) | Generates `/web/zero.js` file. |
 
@@ -99,7 +100,7 @@ Raw internal files for dynamic files within the library.
 > [!CAUTION]
 > For building and internal use only.
 
-### Executable Scripts (`/run`)
+### Executable Scripts (`/script`)
 
 A collection of publicly exposed scripts.
 
@@ -127,6 +128,7 @@ A collection of utility code accessible and usable on both client-side and serve
 
 | Name | Description |
 | - | - |
+| Event Emitter (`/emitter.ts`) | Simplified form of the native event emitter. |
 | Math Extended (`/math.ts`) | Implements more advanced math features. |
 | Object Inspector (`/object.ts`) | Implements more advanced object-related computations. |
 | Protected Call (`/pcall.ts`) | Implements function calls that handles error automatically. |
@@ -152,4 +154,4 @@ A collection of client-side / browser only code.
 
 ---
 
-###### Last Updated: 2025/04/09
+###### Last Updated: 2025/04/11
