@@ -1,8 +1,8 @@
 // Imports
-import { attempt } from "../util/pcall";
+import { ensureSync as ensure } from "../util/pcall";
 
-// Defines constants
+// Defines properties
 /** Project's git commit hash. */
-export const commitHash = attempt(() => Bun.spawnSync([
+export const commitHash = ensure(() => Bun.spawnSync([
     "git", "rev-parse", "--short", "HEAD"
 ]).stdout.toString(), null);

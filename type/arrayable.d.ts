@@ -1,4 +1,4 @@
-// Exports
+// Defines types
 /** Converts a type into both its single form and its array form. */
 export type Arrayable<Element extends any> = Element[] | Element;
 

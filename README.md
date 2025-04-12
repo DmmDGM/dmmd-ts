@@ -36,27 +36,18 @@ bun link dmmd-ts
 
 ### Importing
 
-This library supports two levels of importing, depending on your needs for your project.
-
-- Importing individual namespaces:
-
-```ts
-import util from "dmmd-ts/util";
-import { prototype } from "dmmd-ts/util";
-```
-
-- Importing individual files:
+This library only supports file importing, as demonstrated in the following code snippet:
 
 ```ts
 import prototype from "dmmd-ts/util/prototype";
+prototype.parsePrototypeChain(/** ... */);
+
 import { parsePrototypeChain } from "dmmd-ts/util/prototype";
+parsePrototypeChain(/** ... */);
 ```
 
-> [!NOTE]
-> This library is only meant to be used in Bun's TypeScript environment.
-> If your project is written in vanilla JavaScript and/or in a non-Bun environment (i.e. Node.js, Deno, or browser),
-> and you wish to include this library in your project,
-> you will unfortunately need to build and compile it yourself.
+Please note that this library is only meant to be used in Bun's TypeScript environment.
+If your project is written in vanilla JavaScript and/or in a non-Bun environment (i.e. Node.js, Deno, or browser), and you wish to include this library in your project, you will unfortunately need to build and compile it yourself.
 
 ## Namespaces and Files
 
@@ -66,6 +57,7 @@ A collection of server-side / Bun only code.
 
 | Name | Description |
 | - | - |
+| Keypress (`/keypress.ts`) | Implements a keypress handler. |
 | Project Constants (`/project.ts`) | Collection of project constants. |
 
 ### Stylesheets (`/css`)
@@ -90,6 +82,7 @@ Internal builder for dynamic files within the library.
 
 | Name | Description |
 | - | - |
+| Make All (`/index.ts`) | Generates all files. Use `bun run make` to run file. |
 | Soda.css (`/soda.ts`) | Generates `/css/soda.css` file. |
 | Zero (`/zero.ts`) | Generates `/web/zero.js` file. |
 
@@ -107,7 +100,7 @@ Raw internal files for dynamic files within the library.
 > [!CAUTION]
 > For building and internal use only.
 
-### Executable Scripts (`/run`)
+### Executable Scripts (`/script`)
 
 A collection of publicly exposed scripts.
 
@@ -135,6 +128,7 @@ A collection of utility code accessible and usable on both client-side and serve
 
 | Name | Description |
 | - | - |
+| Event Emitter (`/emitter.ts`) | Simplified form of the native event emitter. |
 | Math Extended (`/math.ts`) | Implements more advanced math features. |
 | Object Inspector (`/object.ts`) | Implements more advanced object-related computations. |
 | Protected Call (`/pcall.ts`) | Implements function calls that handles error automatically. |
@@ -148,8 +142,8 @@ A collection of client-side / browser only code.
 | Name | Description |
 | - | - |
 | Element Inspector (`/element.ts`) | Handles creation and modification of elements with custom shortcuts.
-| Zero (`/zero.ts`) | Implementation of iiPythonx's [`zero.js`](https://github.com/iiPythonx/radio/blob/main/radio/frontend/js/zero.js), with a clear goal of maximum file-size minimization. File import only. |
-| Zero (Compiled) (`/zero.js`) | Compiled file for `/zero.ts`, with the current file size being at `504 bytes`. Further minification using [Minify JS](https://minify-js.com/) can reduce it down to `496 bytes` if needed. File import only. |
+| Zero (`/zero.ts`) | Implementation of iiPythonx's [`zero.js`](https://github.com/iiPythonx/radio/blob/main/radio/frontend/js/zero.js), with a clear goal of maximum file-size minimization. |
+| Zero (Compiled) (`/zero.js`) | Compiled file for `/zero.ts`, with the current file size being at `504 bytes`. Further minification using [Minify JS](https://minify-js.com/) can reduce it down to `496 bytes` if needed. |
 
 ### Script
 
@@ -160,4 +154,4 @@ A collection of client-side / browser only code.
 
 ---
 
-###### Last Updated: 2025/04/07
+###### Last Updated: 2025/04/11
