@@ -89,17 +89,6 @@ Internal builder for dynamic files within the library.
 > [!CAUTION]
 > For building and internal use only.
 
-### Raw Internal Files (`/raw`)
-
-Raw internal files for dynamic files within the library.
-
-| Name | Description |
-| - | - |
-| Soda.css (`/soda.css`) | Template file for `soda.css`. |
-
-> [!CAUTION]
-> For building and internal use only.
-
 ### Executable Scripts (`/script`)
 
 A collection of publicly exposed scripts.
