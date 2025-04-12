@@ -36,7 +36,7 @@ export type ElementShortcuts<TargetElement extends HTMLElement> = {
 /** Creates and initializes an element. */
 export function create<TagName extends keyof HTMLElementTagNameMap>(
     tagName: TagName,
-    options: Partial<ElementOptions<HTMLElementTagNameMap[TagName]>>
+    options: Partial<ElementOptions<HTMLElementTagNameMap[TagName]>> = {}
 ): HTMLElementTagNameMap[TagName] {
     // Creates and returns element
     return modify(document.createElement(tagName), options);
