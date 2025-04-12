@@ -82,7 +82,7 @@ Internal builder for dynamic files within the library.
 
 | Name | Description |
 | - | - |
-| Make All (`/index.ts`) | Generates all files. Use `bun run make` to run file. |
+| Make All (`/index.ts`) | Generates all files. Use `bun make` to run file. |
 | Soda.css (`/soda.ts`) | Generates `/css/soda.css` file. |
 | Zero (`/zero.ts`) | Generates `/web/zero.js` file. |
 
@@ -143,4 +143,4 @@ A collection of client-side / browser only code.
 
 ---
 
-###### Last Updated: 2025/04/11
+###### Last Updated: 2025/04/12
